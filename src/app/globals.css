@@ -99,6 +99,25 @@
 .senha-strip[data-instant] { transition: none; }
 .senha-strip > span { display: block; height: 1em; line-height: 1; }
 
+/* ---------- Painel de senha do hero (display de atendimento) ---------- */
+.led-glow { text-shadow: 0 0 6px rgb(var(--accent) / 0.8), 0 0 18px rgb(var(--accent) / 0.45); }
+.led-matriz {
+  background-image: radial-gradient(circle, transparent 55%, rgba(0, 0, 0, 0.5) 60%);
+  background-size: 3px 3px;
+}
+.painel-senha { box-shadow: inset 0 0 24px rgb(var(--accent) / 0.12); }
+@keyframes painel-ding {
+  0% { box-shadow: inset 0 0 0 1px rgb(var(--accent) / 0.9), 0 0 0 0 rgb(var(--accent) / 0.6); background: rgb(var(--accent) / 0.18); }
+  100% { box-shadow: inset 0 0 0 1px rgb(var(--accent) / 0), 0 0 28px 6px rgb(var(--accent) / 0); background: rgb(var(--accent) / 0); }
+}
+.painel-ding { border-radius: inherit; animation: painel-ding 0.9s ease-out forwards; }
+@keyframes painel-nome { from { transform: translate3d(0, 110%, 0); } to { transform: none; } }
+.painel-nome { animation: painel-nome 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ---------- Selo giratório ---------- */
+@keyframes selo-gira { to { transform: rotate(360deg); } }
+.selo-gira { transform-origin: 50px 50px; animation: selo-gira 18s linear infinite; }
+
 /* ---------- Granulação ---------- */
 .noise {
   position: fixed;
@@ -150,6 +169,7 @@
   .marquee-track { animation: none; }
   .cad-line, .ecg-line { animation: none; stroke-dashoffset: 0; }
   .senha-strip { transition: none; }
+  .painel-ding, .painel-nome, .selo-gira { animation: none; }
   [data-reveal="hidden"] { opacity: 1; transform: none; }
   .story-img { animation: none !important; }
 }

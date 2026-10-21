@@ -9,6 +9,8 @@ type SenhaProps = {
   className?: string;
   /** Anima ao montar (hero) em vez de ao entrar na viewport. */
   onMount?: boolean;
+  /** `false`: não rola do zero ao aparecer; só rola quando `value` muda (painel do hero). */
+  intro?: boolean;
   duration?: number;
 };
 
@@ -18,13 +20,13 @@ const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
  * "Pega a senha": cada dígito rola como painel de senha/ticket até o valor final.
  * SSR renderiza o valor final (visível, sem JS). No cliente, zera e rola ao entrar em vista.
  */
-export function Senha({ value, className, onMount = false, duration = 1.6 }: SenhaProps) {
+export function Senha({ value, className, onMount = false, intro = true, duration = 1.6 }: SenhaProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const [phase, setPhase] = useState<"ssr" | "zero" | "done">("ssr");
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !intro) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     setPhase("zero");
@@ -45,7 +47,7 @@ export function Senha({ value, className, onMount = false, duration = 1.6 }: Sen
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [onMount]);
+  }, [onMount, intro]);
 
   const chars = Array.from(value);
   let digitIndex = 0;

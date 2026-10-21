@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { HardHat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
+import { useVersaoAtual } from "@/components/versao-atual";
 
 type Story = { slug: string; src: string | null; alt: string; posicao?: string; fita?: string; overlay?: string };
 
@@ -15,8 +16,9 @@ const versaoPorSlug = Object.fromEntries(site.versoes.map((v) => [v.slug, v]));
  * Moldura de celular tocando "stories" que contam as versões do Lipe.
  * Avança sozinho (Ken Burns leve), toque na direita avança, na esquerda volta, segurar/hover pausa.
  * Avatar, handle e glow mudam com a versão do story. SSR mostra o 1º story (estático sem JS).
+ * A versão atual vai para o `VersaoAtualProvider` (painel de senha); `children` fica sobre a moldura (selo).
  */
-export function PhoneStories({ stories, label, className }: { stories: readonly Story[]; label: string; className?: string }) {
+export function PhoneStories({ stories, label, className, children }: { stories: readonly Story[]; label: string; className?: string; children?: ReactNode }) {
   const [i, setI] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -39,6 +41,11 @@ export function PhoneStories({ stories, label, className }: { stories: readonly 
 
   const atual = stories[i];
   const versao = versaoPorSlug[atual.slug];
+  const setVersaoAtual = useVersaoAtual()?.setSlug;
+
+  useEffect(() => {
+    setVersaoAtual?.(atual.slug);
+  }, [atual.slug, setVersaoAtual]);
 
   function onPointerDown() {
     hold.current = setTimeout(() => setPaused(true), 180);
@@ -133,6 +140,7 @@ export function PhoneStories({ stories, label, className }: { stories: readonly 
         </a>
         <span aria-hidden className="absolute left-1/2 top-1 h-5 w-20 -translate-x-1/2 rounded-full bg-ink" />
       </div>
+      {children}
     </div>
   );
 }

@@ -86,9 +86,15 @@ export const site = {
   },
 
   hero: {
-    /** Título de um vídeo do Lipe no YouTube. */
-    title: "Quantas versões de você existem?",
-    subtitle: "Engenheiro civil, criador de conteúdo e atleta. O mesmo cara em todas.",
+    eyebrow: "O irmão mais velho que você não teve",
+    /** Jargão do Lipe. `titlePonto` sai na cor da versão. */
+    title: "Pega a senha",
+    titlePonto: ".",
+    subtitle: "Engenheiro civil, criador de conteúdo e atleta. Quatro versões, uma senha só: Stay Alive.",
+    /** Painel de atendimento sincronizado com o story: número = posição da versão em `versoes`. */
+    painel: { label: "Senha", irPara: "Ir para a dobra" },
+    /** Selo giratório na quina do celular (texto em volta, repete sem emenda). */
+    selo: "Stay Alive • Pega a senha • ",
     storiesLabel: "Stories do Lipe",
     /** Sequência que conta as versões. `slug` liga avatar/handle/cor à dobra. `src: null` = tela de obra. */
     stories: [
@@ -102,7 +108,8 @@ export const site = {
       { slug: "lipe-alive", src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando", overlay: "Pega a senha." },
     ] as readonly { slug: string; src: string | null; alt: string; posicao?: string; fita?: string; overlay?: string }[],
     prova: { value: "+2.000.000", label: "seguidores somando os 4 Instagrams e o YouTube" },
-    cartasLabel: "Versões do Lipe",
+    /** Título de um vídeo do Lipe no YouTube; vira o título da seção das cartas. */
+    cartasLabel: "Quantas versões de você existem?",
     recorte: recortes.apontando,
   },
 
@@ -191,7 +198,7 @@ export const site = {
     },
   ] as const satisfies readonly Versao[],
 
-  /** Cartas de personagem do hero (uma por versão, na mesma ordem). */
+  /** Cartas das versões no hero (uma por versão, na mesma ordem). */
   cartas: {
     "lipe-alive": { tipo: "foto", foto: "/fotos/lipe-marina.jpg", posicao: "50% 12%", tag: "Vida e rotina" },
     /** Carta tipográfica: assinatura + seguidores + ícones do Roadmap. */
