@@ -70,7 +70,15 @@ export const site = {
   title: "Lipe Alive — Quantas versões de você existem?",
   description:
     "Lipe Alive: vida e rotina no @lipe.alive, carisma e conteúdo no @llipe.ensina, obra no @lipe.constroi e treino no @llipe.treina. Mais de 2 milhões de seguidores. Stay Alive.",
-  ogImage: "/fotos/lipe-apontando.jpg",
+  /** Imagem de compartilhamento estática (gerada por `npm run build:og`). */
+  og: {
+    src: "/og.jpg",
+    width: 1200,
+    height: 630,
+    alt: "Quantas versões de você existem? Lipe Alive, Ensina, Constrói e Treina. +2 milhões de seguidores.",
+  },
+  /** Cor do navegador/PWA (meta theme-color e manifest). */
+  themeColor: "#0b0b0b",
 
   /** Faixas marquee entre as dobras. */
   marquee: {

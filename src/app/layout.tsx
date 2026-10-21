@@ -30,16 +30,16 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: site.title,
     description: site.description,
-    images: [{ url: site.ogImage, width: 1060, height: 1562, alt: site.hero.recorte.alt }],
+    images: [{ url: site.og.src, width: site.og.width, height: site.og.height, alt: site.og.alt, type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.ogImage] },
+  twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [{ url: site.og.src, alt: site.og.alt }] },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0b0b0c",
+  themeColor: site.themeColor,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

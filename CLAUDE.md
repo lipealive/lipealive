@@ -21,10 +21,14 @@
 ## Estrutura
 - `src/content/site.ts` — conteúdo tipado (fonte única); `src/content/youtube.json` — últimos vídeos
 - `scripts/sync-youtube.mjs` — lê o RSS do canal (channel_id em `CHANNEL_ID`) e grava o JSON
+- `scripts/build-icons.mjs` — gera `src/app/{icon.svg,favicon.ico,apple-icon.png}` e `public/icon-{192,512,maskable-512}.png`. Abaixo de 48px usa a versão simples ("L" + barra laranja); a partir de 48px, "L" + 4 barras das versões
+- `scripts/build-og.mjs` — gera `public/og.jpg` (1200x630, < 300 KB, estático de propósito por causa do WhatsApp). Headline e as 2 primeiras tiras ficam no quadrado central 630x630. Enquadramento das fotos em `STRIPS`
+- `scripts/lib/brand.mjs` — cores, desenho do ícone e texto Bebas Neue como path (fonte em `scripts/fonts/`, licença OFL)
+- `src/app/manifest.ts` — `/manifest.webmanifest`; `site.og` e `site.themeColor` em `site.ts`
 - `src/app/` — layout (SEO, fontes, lang pt-BR), page, globals.css
 - `src/components/sections/` — hero, alive, ensina, constroi, treina, produtos, publicidade
 - `src/components/` — stories-progress (barra fixa), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
 - `src/lib/` — `utils.ts` (cn), `assets.ts` (checagem de arquivo em /public)
 
 ## Comandos
-`npm run dev` · `npm run build` · `npm run lint` · `npm run sync:youtube`
+`npm run dev` · `npm run build` · `npm run lint` · `npm run sync:youtube` · `npm run build:icons` · `npm run build:og`
