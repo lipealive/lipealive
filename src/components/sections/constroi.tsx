@@ -1,4 +1,5 @@
-import { ArrowUpRight, Clapperboard, HardHat } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Clapperboard } from "lucide-react";
 import { site } from "@/content/site";
 import { Senha } from "@/components/senha";
 import { Reveal } from "@/components/reveal";
@@ -31,23 +32,48 @@ export function Constroi() {
 
       <div className="relative mx-auto w-full max-w-page px-4 pb-16 pt-14 sm:px-6 md:pb-24 md:pt-20">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center md:gap-16">
-          {/* placeholder "EM OBRA" */}
+          {/* prancheta: foto principal com cotas de CAD, secundária sobreposta */}
           <Reveal className="relative order-2 md:order-1">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-sm border-2 border-dashed border-ink/60 bg-ink/5">
-              <svg aria-hidden className="absolute inset-0 h-full w-full text-ink/50" viewBox="0 0 80 100" fill="none" stroke="currentColor" strokeWidth="0.6">
-                <path className="cad-line" pathLength={1} d="M8 20 H72 V92 H8 Z M8 56 H72 M40 20 V92" />
-                <path className="cad-line" pathLength={1} style={{ ["--draw-delay" as string]: "0.6s" }} d="M8 14 H72 M8 12 V16 M72 12 V16 M76 20 V92 M74 20 H78 M74 92 H78" />
-                <path className="cad-line" pathLength={1} style={{ ["--draw-delay" as string]: "1s" }} d="M24 56 A16 16 0 0 1 40 40" />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <HardHat className="size-10" aria-hidden />
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.25em]">{constroi.fitaFoto}</span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">{constroi.plantaLabel} · {v.fotos.principal.alt}</span>
-              </div>
-              <span className="fita-obra absolute left-1/2 top-[18%] w-[160%] -translate-x-1/2 -rotate-12 py-2 text-center font-display text-3xl uppercase tracking-[0.3em] text-constroi">
-                <span className="bg-ink px-4 py-1">{constroi.fita}</span>
+            <figure className="relative pb-10 pr-8 pt-8">
+              {/* cota horizontal (topo) */}
+              <span aria-hidden className="absolute left-0 right-8 top-0 flex items-center font-mono text-[10px] font-bold tracking-widest text-ink/80">
+                <span className="h-3 w-px bg-ink" />
+                <span className="h-px flex-1 bg-ink" />
+                <span className="bg-constroi px-1.5">{constroi.cotas.largura}</span>
+                <span className="h-px flex-1 bg-ink" />
+                <span className="h-3 w-px bg-ink" />
               </span>
-            </div>
+              {/* cota vertical (direita) */}
+              <span aria-hidden className="absolute bottom-10 right-0 top-8 flex flex-col items-center font-mono text-[10px] font-bold tracking-widest text-ink/80">
+                <span className="h-px w-3 bg-ink" />
+                <span className="w-px flex-1 bg-ink" />
+                <span className="bg-constroi py-1.5 [writing-mode:vertical-rl]">{constroi.cotas.altura}</span>
+                <span className="w-px flex-1 bg-ink" />
+                <span className="h-px w-3 bg-ink" />
+              </span>
+
+              <div className="relative aspect-[4/5] overflow-hidden border-2 border-ink bg-ink shadow-[8px_8px_0_0_#0b0b0c]">
+                <Image src={v.fotos.principal.src!} alt={v.fotos.principal.alt} fill sizes="(min-width: 768px) 45vw, 100vw" loading="lazy" className="object-cover" style={{ objectPosition: "45% 70%" }} />
+                <span className="fita-obra absolute -left-[10%] top-[6%] w-[120%] -rotate-6 py-1.5 text-center font-display text-2xl uppercase tracking-[0.3em] text-constroi">
+                  <span className="bg-ink px-4 py-0.5">{constroi.fita}</span>
+                </span>
+              </div>
+
+              {/* foto secundária sobreposta */}
+              {v.fotos.secundaria && (
+                <div className="absolute -bottom-2 -left-2 w-[38%] rotate-[-4deg] border-2 border-ink bg-ink shadow-[6px_6px_0_0_#0b0b0c] md:-left-6">
+                  <div className="relative aspect-[4/5] overflow-hidden">
+                    <Image src={v.fotos.secundaria.src!} alt={v.fotos.secundaria.alt} fill sizes="(min-width: 768px) 18vw, 38vw" loading="lazy" className="object-cover" style={{ objectPosition: "78% 45%" }} />
+                  </div>
+                </div>
+              )}
+
+              {/* carimbo da prancha */}
+              <figcaption className="absolute bottom-0 right-8 flex gap-3 border-2 border-ink bg-constroi px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
+                <span>{constroi.cotas.prancha}</span>
+                <span>{constroi.cotas.escala}</span>
+              </figcaption>
+            </figure>
           </Reveal>
 
           <div className="order-1 md:order-2">

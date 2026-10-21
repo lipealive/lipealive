@@ -85,6 +85,12 @@ export function Hero() {
                     </span>
                   )}
 
+                  {carta.tipo === "foto" && carta.fita && (
+                    <span aria-hidden className="fita-obra absolute left-1/2 top-[64%] w-[170%] -translate-x-1/2 -rotate-6 py-1 text-center font-display text-xl uppercase tracking-[0.3em] text-constroi">
+                      <span className="bg-ink px-3 py-0.5">{carta.fita}</span>
+                    </span>
+                  )}
+
                   <span className="relative z-10 flex items-start justify-between p-4">
                     <span className="rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">{carta.tag}</span>
                     <ArrowDown className="size-5 opacity-70 transition-transform group-hover:translate-y-1" aria-hidden />

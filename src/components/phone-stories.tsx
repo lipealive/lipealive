@@ -6,7 +6,7 @@ import { HardHat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
 
-type Story = { slug: string; src: string | null; alt: string; fita?: string; overlay?: string };
+type Story = { slug: string; src: string | null; alt: string; posicao?: string; fita?: string; overlay?: string };
 
 const DURATION = 3; // segundos por story
 const versaoPorSlug = Object.fromEntries(site.versoes.map((v) => [v.slug, v]));
@@ -86,7 +86,7 @@ export function PhoneStories({ stories, label, className }: { stories: readonly 
                 priority={n === 0}
                 loading={n === 0 ? undefined : "lazy"}
                 className="story-img object-top-cover"
-                style={n === i && playing ? { animation: `ken-burns ${DURATION + 0.6}s ease-out forwards` } : undefined}
+                style={{ objectPosition: s.posicao, ...(n === i && playing ? { animation: `ken-burns ${DURATION + 0.6}s ease-out forwards` } : {}) }}
               />
             ) : (
               <div data-accent="constroi" className="blueprint absolute inset-0 flex items-center justify-center">

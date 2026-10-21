@@ -93,7 +93,7 @@ export function Alive() {
                     <li key={d} className="flex w-16 shrink-0 flex-col items-center gap-2 text-center">
                       <span className="flex size-16 items-center justify-center rounded-full border-2 border-ink bg-ink p-[3px]">
                         <span className={cn("relative size-full overflow-hidden rounded-full", !foto && "flex items-center justify-center bg-constroi text-ink")}>
-                          {foto ? <Image src={foto} alt="" fill sizes="64px" loading="lazy" className="object-top-cover" /> : <HardHat className="size-6" aria-hidden />}
+                          {foto ? <Image src={foto} alt="" fill sizes="64px" loading="lazy" className="object-top-cover" style={{ objectPosition: alive.destaquesPosicao[d] }} /> : <HardHat className="size-6" aria-hidden />}
                         </span>
                       </span>
                       <span className="text-[11px] font-semibold leading-tight">{d}</span>

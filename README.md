@@ -1,4 +1,4 @@
-# lipe-lp-hub
+# lipealive
 
 Página geral do Lipe Alive (lipealive.com.br). Next.js 14 + Tailwind + motion.
 

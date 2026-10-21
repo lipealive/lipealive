@@ -88,11 +88,11 @@ export const site = {
       { slug: "lipe-alive", src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
       { slug: "lipe-ensina", src: "/fotos/lipe-close.jpg", alt: "Lipe em close" },
       { slug: "lipe-ensina", src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
-      { slug: "lipe-constroi", src: null, alt: "Em obra", fita: "Em obra" },
+      { slug: "lipe-constroi", src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás", posicao: "45% 70%" },
       { slug: "lipe-treina", src: "/fotos/lipe-treino.jpg", alt: "Lipe treinando" },
       { slug: "lipe-treina", src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
       { slug: "lipe-alive", src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando", overlay: "Pega a senha." },
-    ] as readonly { slug: string; src: string | null; alt: string; fita?: string; overlay?: string }[],
+    ] as readonly { slug: string; src: string | null; alt: string; posicao?: string; fita?: string; overlay?: string }[],
     prova: { value: "+2.000.000", label: "seguidores somando os 4 Instagrams e o YouTube" },
     cartasLabel: "Versões do Lipe",
     recorte: recortes.apontando,
@@ -158,7 +158,10 @@ export const site = {
       headline: "A rotina de obra de um engenheiro civil.",
       descricao: "Canteiro, projeto, gestão e os perrengues de quem toca obra de verdade. Para quem constrói ou quer construir.",
       accent: "constroi",
-      fotos: { principal: { src: null, alt: "Lipe na obra" } },
+      fotos: {
+        principal: { src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás" },
+        secundaria: { src: "/fotos/lipe-obra-capacete.jpg", alt: "Lipe de capacete na rua sendo asfaltada" },
+      },
       ctas: [{ label: "Entrar no ConstruSenha", href: "https://construsenha.systeme.io/cadastro", primary: true }],
       posts: posts("lipe-constroi", ["https://instagram.com/lipe.constroi", "https://instagram.com/lipe.constroi", "https://instagram.com/lipe.constroi", "https://instagram.com/lipe.constroi"]),
     },
@@ -185,8 +188,8 @@ export const site = {
     "lipe-alive": { tipo: "foto", foto: "/fotos/lipe-marina.jpg", posicao: "50% 12%", tag: "Vida e rotina" },
     /** Carta tipográfica: assinatura + seguidores + ícones do Roadmap. */
     "lipe-ensina": { tipo: "ensina", foto: null, tag: "Carisma e conteúdo", seguidoresGrande: "250 mil" },
-    /** Sem foto ainda: fita "Em obra" sobre planta baixa. */
-    "lipe-constroi": { tipo: "obra", foto: null, tag: "Obra e engenharia", fita: "Em obra" },
+    /** Selfie de capacete (rosto à direita); a fita "Em obra" fica embaixo, como detalhe. */
+    "lipe-constroi": { tipo: "foto", foto: "/fotos/lipe-obra-capacete.jpg", posicao: "78% 45%", tag: "Obra e engenharia", fita: "Em obra" },
     /** Foco no boné e no tênis. */
     "lipe-treina": { tipo: "foto", foto: "/fotos/lipe-banco-treino.jpg", posicao: "50% 40%", tag: "Hyrox, boxe e nutrição" },
   } as Record<string, { tipo: "foto" | "ensina" | "obra"; foto: string | null; posicao?: string; tag: string; fita?: string; seguidoresGrande?: string }>,
@@ -196,12 +199,14 @@ export const site = {
     destaquesLabel: "Destaques",
     /** Foto de cada destaque (crop redondo). `null` = placeholder amarelo com capacete. */
     destaquesFotos: {
-      "Diário de obra": null,
+      "Diário de obra": "/fotos/lipe-obra-capacete.jpg",
       Treino: "/fotos/lipe-banco-treino.jpg",
       Redbull: "/fotos/lipe-carro.jpg",
       Rango: "/fotos/lipe-marina.jpg",
       "Eng.": "/fotos/lipe-close.jpg",
     } as Record<string, string | null>,
+    /** object-position por destaque (padrão: topo). */
+    destaquesPosicao: { "Diário de obra": "80% 45%" } as Record<string, string>,
     youtubeTitle: "Últimos vídeos",
     youtubeNota: "Atualizado manualmente com npm run sync:youtube",
   },
@@ -246,7 +251,8 @@ export const site = {
   /** Dobra Lipe Constrói */
   constroi: {
     fita: "Em obra",
-    fitaFoto: "Foto em obra",
+    /** Cotas de CAD em volta da prancheta. */
+    cotas: { largura: "12,38 m", altura: "17,12 m", escala: "ESC 1:50", prancha: "PR-01" },
     temasTitle: "Nos reels",
     temas: [
       "Como é separada a energia que entra no apartamento?",
