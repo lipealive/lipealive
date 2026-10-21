@@ -143,10 +143,13 @@
 
 /* ---------- Stories (barra do celular) ---------- */
 @keyframes story-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes ken-burns { from { transform: scale(1) translate3d(0, 0, 0); } to { transform: scale(1.08) translate3d(-2%, -1.5%, 0); } }
+.story-paused * { animation-play-state: paused !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
   .cad-line, .ecg-line { animation: none; stroke-dashoffset: 0; }
   .senha-strip { transition: none; }
   [data-reveal="hidden"] { opacity: 1; transform: none; }
+  .story-img { animation: none !important; }
 }

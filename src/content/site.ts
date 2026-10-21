@@ -81,8 +81,18 @@ export const site = {
     /** Título de um vídeo do Lipe no YouTube. */
     title: "Quantas versões de você existem?",
     subtitle: "Engenheiro civil, criador de conteúdo e atleta. O mesmo cara em todas.",
-    /** Handle gigante em outline atrás do recorte, dentro do painel laranja. */
-    painelHandle: "@lipe.alive",
+    storiesLabel: "Stories do Lipe",
+    /** Sequência que conta as versões. `slug` liga avatar/handle/cor à dobra. `src: null` = tela de obra. */
+    stories: [
+      { slug: "lipe-alive", src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
+      { slug: "lipe-alive", src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
+      { slug: "lipe-ensina", src: "/fotos/lipe-close.jpg", alt: "Lipe em close" },
+      { slug: "lipe-ensina", src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
+      { slug: "lipe-constroi", src: null, alt: "Em obra", fita: "Em obra" },
+      { slug: "lipe-treina", src: "/fotos/lipe-treino.jpg", alt: "Lipe treinando" },
+      { slug: "lipe-treina", src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
+      { slug: "lipe-alive", src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando", overlay: "Pega a senha." },
+    ] as readonly { slug: string; src: string | null; alt: string; fita?: string; overlay?: string }[],
     prova: { value: "+2.000.000", label: "seguidores somando os 4 Instagrams e o YouTube" },
     cartasLabel: "Versões do Lipe",
     recorte: recortes.apontando,
@@ -183,12 +193,15 @@ export const site = {
 
   /** Dobra Lipe Alive */
   alive: {
-    storiesLabel: "Stories do Lipe",
-    stories: [
-      { src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
-      { src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
-    ],
     destaquesLabel: "Destaques",
+    /** Foto de cada destaque (crop redondo). `null` = placeholder amarelo com capacete. */
+    destaquesFotos: {
+      "Diário de obra": null,
+      Treino: "/fotos/lipe-banco-treino.jpg",
+      Redbull: "/fotos/lipe-carro.jpg",
+      Rango: "/fotos/lipe-marina.jpg",
+      "Eng.": "/fotos/lipe-close.jpg",
+    } as Record<string, string | null>,
     youtubeTitle: "Últimos vídeos",
     youtubeNota: "Atualizado manualmente com npm run sync:youtube",
   },

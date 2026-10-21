@@ -2,9 +2,10 @@ import Image from "next/image";
 import { ArrowDown, HardHat } from "lucide-react";
 import { site } from "@/content/site";
 import { Senha } from "@/components/senha";
+import { PhoneStories } from "@/components/phone-stories";
 
 /**
- * Hero: "QUANTAS VERSÕES DE VOCÊ EXISTEM?" + painel laranja com o recorte "saindo do quadro"
+ * Hero: "QUANTAS VERSÕES DE VOCÊ EXISTEM?" + celular com stories contando as versões
  * + 4 cartas de personagem (hover expande no desktop; pilha com swipe no mobile).
  * Tudo visível no SSR; o contador rola ao carregar.
  */
@@ -13,8 +14,8 @@ export function Hero() {
 
   return (
     <section id="top" data-accent="alive" className="relative overflow-x-clip bg-ink text-white">
-      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-20 sm:px-6 md:pt-32">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-end md:gap-12">
+      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-20 sm:px-6 md:pt-28">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-stretch md:gap-12">
           <div className="relative z-10">
             <h1 className="font-display text-[clamp(3.6rem,13.5vw,10rem)] uppercase leading-[0.86] tracking-tight text-balance">{hero.title}</h1>
             <p className="mt-5 max-w-md text-lg text-white/80 sm:text-xl">{hero.subtitle}</p>
@@ -24,26 +25,9 @@ export function Hero() {
             </p>
           </div>
 
-          {/* painel laranja: recorte com a base cortada e a cabeça furando o topo */}
-          {/* corta SÓ na base do painel: a cabeça e a mão furam o topo */}
-          <div className="relative mt-16 aspect-[4/5] w-full md:mt-0 md:aspect-[3/4]" style={{ clipPath: "inset(-100% -50% 0 -50%)" }}>
-            <div className="absolute inset-x-0 bottom-0 top-[22%] overflow-hidden rounded-lg bg-accent">
-              <span aria-hidden className="pointer-events-none absolute -left-[4%] top-1/2 -translate-y-1/2 whitespace-nowrap font-display text-[min(38vw,15rem)] leading-none text-ink text-outline-2 opacity-40">
-                {hero.painelHandle}
-              </span>
-              {/* sombra de contato */}
-              <span aria-hidden className="absolute bottom-0 left-1/2 h-10 w-[70%] -translate-x-1/2 translate-y-1/2 rounded-[100%] bg-ink/50 blur-xl" />
-            </div>
-            <Image
-              src={hero.recorte.src}
-              alt={hero.recorte.alt}
-              width={hero.recorte.width}
-              height={hero.recorte.height}
-              priority
-              sizes="(min-width: 768px) 36vw, 92vw"
-              className="absolute bottom-[-4%] left-1/2 w-[96%] max-w-none -translate-x-1/2 select-none"
-              draggable={false}
-            />
+          {/* celular: no desktop acompanha a altura da headline; no mobile abaixo, até 70vh */}
+          <div className="relative flex h-[70vh] items-center justify-center md:h-auto md:min-h-0">
+            <PhoneStories stories={hero.stories} label={hero.storiesLabel} className="h-full" />
           </div>
         </div>
 
@@ -65,7 +49,6 @@ export function Hero() {
                   href={`#${v.slug}`}
                   className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-lg bg-accent text-accent-foreground ring-offset-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
                 >
-                  {/* fundo de cada tipo de carta */}
                   {carta.tipo === "foto" && carta.foto && (
                     <>
                       <Image src={carta.foto} alt="" fill sizes="(min-width: 768px) 30vw, 72vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" style={{ objectPosition: carta.posicao }} />
