@@ -12,8 +12,8 @@ export function Hero() {
   const { hero, ensina } = site;
 
   return (
-    <section id="top" data-accent="alive" className="relative overflow-hidden bg-ink text-white">
-      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-20 sm:px-6 md:pt-24">
+    <section id="top" data-accent="alive" className="relative overflow-x-clip bg-ink text-white">
+      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-20 sm:px-6 md:pt-32">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-end md:gap-12">
           <div className="relative z-10">
             <h1 className="font-display text-[clamp(3.6rem,13.5vw,10rem)] uppercase leading-[0.86] tracking-tight text-balance">{hero.title}</h1>
@@ -25,7 +25,8 @@ export function Hero() {
           </div>
 
           {/* painel laranja: recorte com a base cortada e a cabeça furando o topo */}
-          <div className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[3/4]">
+          {/* corta SÓ na base do painel: a cabeça e a mão furam o topo */}
+          <div className="relative mt-16 aspect-[4/5] w-full md:mt-0 md:aspect-[3/4]" style={{ clipPath: "inset(-100% -50% 0 -50%)" }}>
             <div className="absolute inset-x-0 bottom-0 top-[22%] overflow-hidden rounded-lg bg-accent">
               <span aria-hidden className="pointer-events-none absolute -left-[4%] top-1/2 -translate-y-1/2 whitespace-nowrap font-display text-[min(38vw,15rem)] leading-none text-ink text-outline-2 opacity-40">
                 {hero.painelHandle}
