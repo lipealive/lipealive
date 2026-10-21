@@ -2,26 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+/*
+  Tema Lipe Alive: fundo escuro fixo, uma cor de acento por versão.
+  Cada dobra define `--accent` via [data-accent="..."]; os componentes usam
+  as classes `bg-accent`, `text-accent`, `border-accent` (ver tailwind.config.ts).
+*/
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    --background: 10 10 10; /* #0a0a0a */
+    --surface: 20 20 20;
+    --surface-2: 30 30 30;
+    --foreground: 245 245 245;
+    --muted-foreground: 163 163 163;
+    --border: 255 255 255;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    --alive: 255 106 0; /* laranja */
+    --ensina: 56 132 255; /* azul */
+    --constroi: 255 196 0; /* amarelo obra */
+    --treina: 230 48 48; /* vermelho */
+
+    --accent: var(--alive);
+    --accent-foreground: 10 10 10;
+    --radius: 1.25rem;
+  }
+
+  [data-accent="alive"] { --accent: var(--alive); --accent-foreground: 10 10 10; }
+  [data-accent="ensina"] { --accent: var(--ensina); --accent-foreground: 255 255 255; }
+  [data-accent="constroi"] { --accent: var(--constroi); --accent-foreground: 10 10 10; }
+  [data-accent="treina"] { --accent: var(--treina); --accent-foreground: 255 255 255; }
+
+  html {
+    overflow-x: clip;
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: rgb(var(--accent) / 0.9);
+    color: rgb(var(--accent-foreground));
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  /* Fotos verticais: ancora no topo para não cortar a cabeça. */
+  .object-top-cover { object-fit: cover; object-position: 50% 12%; }
+  .pt-safe { padding-top: env(safe-area-inset-top); }
 }
