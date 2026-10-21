@@ -1,53 +1,111 @@
+import Image from "next/image";
 import { ArrowDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
-import { Foto } from "@/components/foto";
-import { Stagger, StaggerItem } from "@/components/motion";
+import { Senha } from "@/components/senha";
+import { Recorte } from "@/components/recorte";
 
-/** Primeira dobra: título, prova social e atalhos que rolam até cada versão. Foto com prioridade (LCP). */
+/**
+ * Hero: "QUANTAS VERSÕES DE VOCÊ EXISTEM?" + 4 cartas de personagem.
+ * Hover (desktop) expande a carta; no mobile é uma pilha com swipe (snap).
+ * Tudo visível no SSR; o contador rola ao carregar.
+ */
 export function Hero() {
   const { hero } = site;
 
   return (
-    <section id="top" className="relative overflow-hidden pt-14">
-      <div className="mx-auto grid w-full max-w-page grid-cols-1 gap-8 px-4 pb-12 pt-6 sm:px-6 md:min-h-[calc(100svh-3.5rem)] md:grid-cols-2 md:items-center md:gap-12 md:py-12">
-        <Stagger inView={false} className="order-2 flex flex-col gap-6 md:order-1">
-          <StaggerItem>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">{hero.eyebrow}</p>
-          </StaggerItem>
-          <StaggerItem>
-            <h1 className="font-display text-[clamp(3.25rem,13vw,7.5rem)] uppercase leading-[0.88] tracking-tight text-balance">
+    <section id="top" data-accent="alive" className="relative overflow-hidden bg-ink text-white">
+      {/* brilho laranja */}
+      <div aria-hidden className="pointer-events-none absolute -right-[20%] -top-[10%] h-[70vw] w-[70vw] rounded-full bg-accent/30 blur-[120px]" />
+
+      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-8 sm:px-6 md:pt-12">
+        <div className="relative grid grid-cols-1 gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+          <div className="relative z-10">
+            <p className="font-display text-xl uppercase tracking-[0.2em] text-accent">{hero.eyebrow}</p>
+            <h1 className="mt-3 font-display text-[clamp(3.6rem,13.5vw,10rem)] uppercase leading-[0.86] tracking-tight text-balance">
               {hero.title}
             </h1>
-          </StaggerItem>
-          <StaggerItem>
-            <p className="flex flex-wrap items-baseline gap-x-2">
-              <span className="font-display text-4xl leading-none text-accent sm:text-5xl">{hero.prova.value}</span>
-              <span className="text-lg text-foreground">{hero.prova.label}</span>
+            <p className="mt-5 text-lg text-white/80 sm:text-xl">{hero.subtitle}</p>
+            <p className="mt-6 flex flex-col gap-1">
+              <Senha value={hero.prova.value} onMount className="font-display text-[clamp(2.75rem,9vw,5.5rem)] text-accent" />
+              <span className="max-w-xs text-sm text-white/70 sm:text-base">{hero.prova.label}</span>
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">{hero.provaNota}</p>
-          </StaggerItem>
-          <StaggerItem>
-            <p className="mb-3 text-sm text-muted-foreground">{hero.chipsLabel}</p>
-            <nav aria-label={site.nav.label} className="flex flex-wrap gap-2">
-              {site.versoes.map((v) => (
-                <a
-                  key={v.slug}
-                  href={`#${v.slug}`}
-                  data-accent={v.accent}
-                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border/15 px-4 text-sm font-semibold transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <span className="size-2 rounded-full bg-accent" aria-hidden />
-                  {v.nome}
-                  <ArrowDown className="size-3.5 opacity-60" aria-hidden />
-                </a>
-              ))}
-            </nav>
-          </StaggerItem>
-        </Stagger>
+          </div>
 
-        <div className="order-1 md:order-2">
-          <Foto foto={hero.foto} priority aspect="aspect-[4/5] sm:aspect-[3/4]" sizes="(min-width: 768px) 45vw, 100vw" className="max-h-[70svh] md:max-h-none" />
+          {/* recorte grande saindo da composição */}
+          <div className="relative -mb-10 -mr-8 w-[82%] justify-self-end sm:-mr-12 md:-mb-16 md:w-full">
+            <Recorte recorte={hero.recorte} priority sizes="(min-width: 768px) 38vw, 80vw" className="drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)]" />
+          </div>
         </div>
+
+        {/* cartas de personagem */}
+        <p className="mt-10 mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/60">{hero.cartasLabel}</p>
+        <ul
+          aria-label={hero.cartasLabel}
+          className="relative z-10 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 no-scrollbar md:mx-0 md:h-[420px] md:gap-3 md:overflow-visible md:px-0 lg:h-[480px]"
+        >
+          {site.versoes.map((v) => {
+            const carta = site.cartas[v.slug];
+            return (
+              <li
+                key={v.slug}
+                data-accent={v.accent}
+                className="group relative aspect-[3/4] w-[72vw] shrink-0 snap-center md:aspect-auto md:h-full md:w-auto md:flex-1 md:transition-[flex] md:duration-500 md:ease-out md:hover:flex-[1.7] md:focus-within:flex-[1.7]"
+              >
+                <a
+                  href={`#${v.slug}`}
+                  className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-lg bg-accent text-accent-foreground ring-offset-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                >
+                  {/* handle gigante atrás */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -left-2 top-1/2 origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap font-display text-[5rem] leading-none text-outline opacity-40 md:text-[6rem]"
+                  >
+                    {v.handle}
+                  </span>
+
+                  {/* imagem */}
+                  {carta.foto && (
+                    <Image src={carta.foto} alt="" fill sizes="(min-width: 768px) 30vw, 72vw" className="object-top-cover" />
+                  )}
+                  {carta.recorte && (
+                    <Image
+                      src={carta.recorte.src}
+                      alt=""
+                      width={carta.recorte.width}
+                      height={carta.recorte.height}
+                      sizes="(min-width: 768px) 30vw, 72vw"
+                      className="absolute bottom-0 left-1/2 h-[92%] w-auto max-w-none -translate-x-1/2 object-contain transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  )}
+                  {carta.fita && (
+                    <span className="fita-obra absolute left-1/2 top-[52%] w-[160%] -translate-x-1/2 -rotate-12 py-1.5 text-center font-display text-2xl uppercase tracking-[0.3em] text-constroi">
+                      <span className="bg-ink px-3 py-0.5">{carta.fita}</span>
+                    </span>
+                  )}
+
+                  {/* gradiente de leitura */}
+                  {carta.foto && <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-accent to-transparent" />}
+
+                  <span className="relative z-10 flex items-start justify-between p-4">
+                    <span className="rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">{carta.tag}</span>
+                    <ArrowDown className="size-5 opacity-70 transition-transform group-hover:translate-y-1" aria-hidden />
+                  </span>
+                  <span className="relative z-10 p-4">
+                    <span className="block font-display text-4xl uppercase leading-[0.9] lg:text-5xl">{v.nome}</span>
+                    <span
+                      className={cn(
+                        "mt-2 block text-sm font-semibold transition-[opacity,transform] duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100",
+                      )}
+                    >
+                      {v.handle} · {v.seguidores} {site.ui.seguidores}
+                    </span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

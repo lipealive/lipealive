@@ -1,61 +1,54 @@
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { site } from "@/content/site";
 import { Foto } from "@/components/foto";
-import { FadeIn } from "@/components/motion";
+import { Reveal } from "@/components/reveal";
+import { CtaLink } from "@/components/cta-link";
+import { Magnetic } from "@/components/magnetic";
 
-/** Produtos do Lipe: Alive Finance (link) e Boné Stay Alive (em breve, sem link). */
+/** Produtos: Alive Finance com a marca real (logo + Pulse) e o boné Stay Alive em breve. */
 export function Produtos() {
   const { produtos } = site;
+  const af = produtos.aliveFinance;
 
   return (
-    <section id="produtos" data-accent="alive" aria-labelledby="produtos-titulo" className="scroll-mt-14 border-t border-border/10 py-14 md:py-24">
+    <section id="produtos" data-accent="alive" aria-labelledby="produtos-titulo" className="relative bg-ink py-16 text-white md:py-24">
       <div className="mx-auto w-full max-w-page px-4 sm:px-6">
-        <FadeIn>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">{produtos.eyebrow}</p>
-          <h2 id="produtos-titulo" className="mt-2 font-display text-5xl uppercase leading-none tracking-tight sm:text-6xl">
+        <Reveal>
+          <p className="font-display text-xl uppercase tracking-[0.2em] text-accent">{produtos.eyebrow}</p>
+          <h2 id="produtos-titulo" className="mt-2 font-display text-[clamp(3.5rem,12vw,7rem)] uppercase leading-[0.88] tracking-tight">
             {produtos.title}
           </h2>
-        </FadeIn>
+        </Reveal>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          {produtos.items.map((item, i) => {
-            const content = (
-              <>
-                {item.foto.src ? (
-                  <Foto foto={item.foto} aspect="aspect-[4/5]" sizes="(min-width: 640px) 50vw, 100vw" className="rounded-none" />
-                ) : (
-                  <div className="flex aspect-[4/5] items-center justify-center bg-gradient-to-br from-accent/30 via-surface to-surface p-6">
-                    <span className="font-display text-5xl uppercase leading-none text-foreground sm:text-6xl">{item.nome}</span>
-                  </div>
-                )}
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-background via-background/80 to-transparent p-5 pt-16">
-                  <div>
-                    {"badge" in item && item.badge && (
-                      <span className="mb-2 inline-block rounded-full bg-foreground px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-background">
-                        {item.badge}
-                      </span>
-                    )}
-                    <h3 className="font-display text-3xl uppercase leading-none">{item.nome}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{item.descricao}</p>
-                  </div>
-                  {item.href && <ArrowUpRight className="size-6 shrink-0 text-accent" aria-hidden />}
-                </div>
-              </>
-            );
-            const className = "group relative block overflow-hidden rounded-lg bg-surface";
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Alive Finance */}
+          <Reveal className="relative overflow-hidden rounded-lg bg-finance-ink p-6 ring-1 ring-white/10 sm:p-8">
+            <Image src={af.simbolo.src} alt="" width={af.simbolo.width} height={af.simbolo.height} unoptimized aria-hidden className="pointer-events-none absolute -right-6 -top-4 w-[70%] opacity-20" />
+            <div className="relative flex h-full flex-col justify-between gap-10">
+              <Image src={af.logo.src} alt={`${af.nome} ${af.byline}`} width={af.logo.width} height={af.logo.height} unoptimized className="h-12 w-auto" />
+              <div>
+                <p className="font-display text-4xl uppercase leading-none sm:text-5xl">{af.nome}</p>
+                <p className="mt-2 text-base text-white/75">{af.descricao}</p>
+                <Magnetic className="mt-6 inline-block">
+                  <CtaLink href={af.href} className="bg-finance text-white hover:bg-finance/90">
+                    {af.ctaLabel}
+                    <ArrowUpRight className="size-4" aria-hidden />
+                  </CtaLink>
+                </Magnetic>
+              </div>
+            </div>
+          </Reveal>
 
-            return (
-              <FadeIn key={item.slug} delay={i * 0.08}>
-                {item.href ? (
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className={className}>
-                    {content}
-                  </a>
-                ) : (
-                  <div className={className}>{content}</div>
-                )}
-              </FadeIn>
-            );
-          })}
+          {/* Boné */}
+          <Reveal className="relative overflow-hidden rounded-lg bg-surface" delay={0.1}>
+            <Foto foto={produtos.bone.foto} aspect="aspect-[4/5] md:aspect-auto md:h-full md:min-h-[360px]" sizes="(min-width: 768px) 50vw, 100vw" className="rounded-none" />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/80 to-transparent p-6 pt-20 sm:p-8">
+              <span className="inline-block rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-ink">{produtos.bone.badge}</span>
+              <p className="mt-3 font-display text-4xl uppercase leading-none sm:text-5xl">{produtos.bone.nome}</p>
+              <p className="mt-2 text-base text-white/75">{produtos.bone.descricao}</p>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -3,33 +3,33 @@
 @tailwind utilities;
 
 /*
-  Tema Lipe Alive: fundo escuro fixo, uma cor de acento por versão.
-  Cada dobra define `--accent` via [data-accent="..."]; os componentes usam
-  as classes `bg-accent`, `text-accent`, `border-accent` (ver tailwind.config.ts).
+  Tema Lipe Alive: cada versão toma a tela com a SUA cor chapada.
+  Dobras definem `--accent` e `--on-accent` via [data-accent="..."].
+  Regra: todo conteúdo renderiza VISÍVEL no SSR; animações só melhoram.
 */
 @layer base {
   :root {
-    --background: 10 10 10; /* #0a0a0a */
-    --surface: 20 20 20;
-    --surface-2: 30 30 30;
+    --background: 11 11 12;
+    --surface: 22 22 24;
+    --surface-2: 34 34 37;
     --foreground: 245 245 245;
     --muted-foreground: 163 163 163;
     --border: 255 255 255;
 
-    --alive: 255 106 0; /* laranja */
-    --ensina: 56 132 255; /* azul */
-    --constroi: 255 196 0; /* amarelo obra */
-    --treina: 230 48 48; /* vermelho */
+    --alive: 255 90 31; /* laranja do Lipe (#FF5A1F) */
+    --ensina: 0 112 214; /* azul Lipe Ensina (#0070D6) */
+    --constroi: 255 196 0; /* amarelo obra (#FFC400) */
+    --treina: 225 29 46; /* vermelho (#E11D2E) */
 
     --accent: var(--alive);
-    --accent-foreground: 10 10 10;
+    --on-accent: 11 11 12;
     --radius: 1.25rem;
   }
 
-  [data-accent="alive"] { --accent: var(--alive); --accent-foreground: 10 10 10; }
-  [data-accent="ensina"] { --accent: var(--ensina); --accent-foreground: 255 255 255; }
-  [data-accent="constroi"] { --accent: var(--constroi); --accent-foreground: 10 10 10; }
-  [data-accent="treina"] { --accent: var(--treina); --accent-foreground: 255 255 255; }
+  [data-accent="alive"] { --accent: var(--alive); --on-accent: 11 11 12; }
+  [data-accent="ensina"] { --accent: var(--ensina); --on-accent: 255 255 255; }
+  [data-accent="constroi"] { --accent: var(--constroi); --on-accent: 11 11 12; }
+  [data-accent="treina"] { --accent: var(--treina); --on-accent: 255 255 255; }
 
   html {
     overflow-x: clip;
@@ -44,17 +44,106 @@
     @apply bg-background text-foreground font-sans antialiased;
     overflow-x: clip;
   }
-  ::selection {
-    background: rgb(var(--accent) / 0.9);
-    color: rgb(var(--accent-foreground));
-  }
+  ::selection { background: rgb(var(--accent)); color: rgb(var(--on-accent)); }
 }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
-  /* Fotos verticais: ancora no topo para não cortar a cabeça. */
   .object-top-cover { object-fit: cover; object-position: 50% 12%; }
   .pt-safe { padding-top: env(safe-area-inset-top); }
+  /* Texto vazado (só contorno) para handles gigantes atrás do recorte. */
+  .text-outline { -webkit-text-stroke: 1.5px currentColor; -webkit-text-fill-color: transparent; }
+  .text-outline-2 { -webkit-text-stroke: 2px currentColor; -webkit-text-fill-color: transparent; }
+}
+
+/* ---------- Reveal: visível no SSR; só esconde depois da hidratação e fora da viewport ---------- */
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 24px), 0);
+}
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+/* ---------- Marquee ---------- */
+@keyframes marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+.marquee-track { animation: marquee var(--marquee-duration, 28s) linear infinite; will-change: transform; }
+.marquee-track[data-reverse] { animation-direction: reverse; }
+
+/* ---------- "Pega a senha": dígitos que rolam como painel de senha ---------- */
+.senha { line-height: 1; }
+.senha-digit {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  line-height: 1;
+  overflow: hidden;
+  contain: paint;
+  vertical-align: top;
+}
+.senha-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translate3d(0, calc(var(--d, 0) * -1em), 0);
+  transition: transform var(--senha-duration, 1.6s) cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--senha-delay, 0s);
+}
+.senha-strip[data-instant] { transition: none; }
+.senha-strip > span { display: block; height: 1em; line-height: 1; }
+
+/* ---------- Granulação ---------- */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ---------- Fita zebrada de obra ---------- */
+.fita-obra {
+  background: repeating-linear-gradient(-45deg, #0b0b0c 0 14px, rgb(var(--constroi)) 14px 28px);
+}
+
+/* ---------- Blueprint (planta baixa) ---------- */
+.blueprint {
+  background-color: rgb(var(--constroi));
+  background-image:
+    linear-gradient(rgba(11, 11, 12, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 11, 12, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(11, 11, 12, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 11, 12, 0.06) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.cad-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--draw-delay, 0s);
+}
+
+/* ---------- ECG ---------- */
+@keyframes ecg { to { stroke-dashoffset: 0; } }
+.ecg-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ecg 4s linear infinite;
+}
+
+/* ---------- Stories (barra do celular) ---------- */
+@keyframes story-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .cad-line, .ecg-line { animation: none; stroke-dashoffset: 0; }
+  .senha-strip { transition: none; }
+  [data-reveal="hidden"] { opacity: 1; transform: none; }
 }
