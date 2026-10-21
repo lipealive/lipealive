@@ -1,7 +1,7 @@
 import { site } from "@/content/site";
 import { Senha } from "@/components/senha";
 import { Reveal } from "@/components/reveal";
-import { Recorte } from "@/components/recorte";
+import Image from "next/image";
 import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
 import { HyroxTimer } from "@/components/hyrox-timer";
@@ -15,7 +15,7 @@ export function Treina() {
   const palavras = [...treina.palavras, ...treina.palavras, ...treina.palavras];
 
   return (
-    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="relative overflow-hidden bg-accent text-white">
+    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 relative overflow-hidden bg-accent text-white">
       <div className="relative mx-auto w-full max-w-page px-4 pt-14 sm:px-6 md:pt-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <HyroxTimer label={treina.cronometroLabel} />
@@ -55,8 +55,8 @@ export function Treina() {
       </svg>
 
       <div className="relative mx-auto w-full max-w-page px-4 pb-0 pt-4 sm:px-6 md:pt-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-end">
-          <div className="pb-14 md:pb-24">
+        <div className="grid grid-cols-1 gap-8 pb-14 md:grid-cols-[1.1fr_0.9fr] md:items-stretch md:pb-24">
+          <div>
             <h2 id={`${v.slug}-titulo`} className="font-display text-[clamp(3.5rem,14.5vw,10rem)] uppercase leading-[0.86] tracking-tight">
               {v.nome}
             </h2>
@@ -83,8 +83,15 @@ export function Treina() {
           </div>
 
           {v.recorte && (
-            <div className="relative mx-auto w-[60%] md:w-[80%]">
-              <Recorte recorte={v.recorte} sizes="(min-width: 768px) 30vw, 60vw" className="drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)]" />
+            <div className="relative h-[60vh] md:h-auto">
+              <Image
+                src={v.recorte.src}
+                alt={v.recorte.alt}
+                fill
+                sizes="(min-width: 768px) 36vw, 90vw"
+                loading="lazy"
+                className="object-contain object-bottom drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)] md:object-center"
+              />
             </div>
           )}
         </div>

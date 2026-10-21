@@ -30,6 +30,9 @@
   [data-accent="ensina"] { --accent: var(--ensina); --on-accent: 255 255 255; }
   [data-accent="constroi"] { --accent: var(--constroi); --on-accent: 11 11 12; }
   [data-accent="treina"] { --accent: var(--treina); --on-accent: 255 255 255; }
+  /* Header sobre dobras sem cor de versão */
+  [data-accent="ink"] { --accent: 11 11 12; --on-accent: 255 255 255; }
+  [data-accent="paper"] { --accent: 243 241 236; --on-accent: 11 11 12; }
 
   html {
     overflow-x: clip;

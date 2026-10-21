@@ -78,10 +78,11 @@ export const site = {
   },
 
   hero: {
-    eyebrow: "Lipe Alive",
     /** Título de um vídeo do Lipe no YouTube. */
     title: "Quantas versões de você existem?",
-    subtitle: "Escolhe o seu personagem.",
+    subtitle: "Engenheiro civil, criador de conteúdo e atleta. O mesmo cara em todas.",
+    /** Handle gigante em outline atrás do recorte, dentro do painel laranja. */
+    painelHandle: "@lipe.alive",
     prova: { value: "+2.000.000", label: "seguidores somando os 4 Instagrams e o YouTube" },
     cartasLabel: "Versões do Lipe",
     recorte: recortes.apontando,
@@ -171,11 +172,14 @@ export const site = {
 
   /** Cartas de personagem do hero (uma por versão, na mesma ordem). */
   cartas: {
-    "lipe-alive": { foto: "/fotos/lipe-marina.jpg", recorte: null, tag: "Vida e rotina" },
-    "lipe-ensina": { foto: null, recorte: recortes.close, tag: "Carisma e conteúdo" },
-    "lipe-constroi": { foto: null, recorte: null, tag: "Obra e engenharia", fita: "Em obra" },
-    "lipe-treina": { foto: null, recorte: recortes.treino, tag: "Hyrox, boxe e nutrição" },
-  } as Record<string, { foto: string | null; recorte: Recorte | null; tag: string; fita?: string }>,
+    "lipe-alive": { tipo: "foto", foto: "/fotos/lipe-marina.jpg", posicao: "50% 12%", tag: "Vida e rotina" },
+    /** Carta tipográfica: assinatura + seguidores + ícones do Roadmap. */
+    "lipe-ensina": { tipo: "ensina", foto: null, tag: "Carisma e conteúdo", seguidoresGrande: "250 mil" },
+    /** Sem foto ainda: fita "Em obra" sobre planta baixa. */
+    "lipe-constroi": { tipo: "obra", foto: null, tag: "Obra e engenharia", fita: "Em obra" },
+    /** Foco no boné e no tênis. */
+    "lipe-treina": { tipo: "foto", foto: "/fotos/lipe-banco-treino.jpg", posicao: "50% 40%", tag: "Hyrox, boxe e nutrição" },
+  } as Record<string, { tipo: "foto" | "ensina" | "obra"; foto: string | null; posicao?: string; tag: string; fita?: string; seguidoresGrande?: string }>,
 
   /** Dobra Lipe Alive */
   alive: {

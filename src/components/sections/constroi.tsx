@@ -13,7 +13,7 @@ export function Constroi() {
   const { constroi, ui } = site;
 
   return (
-    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="blueprint relative overflow-hidden text-ink">
+    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 blueprint relative overflow-hidden text-ink">
       <div aria-hidden className="fita-obra h-4" />
       <span aria-hidden className="pointer-events-none absolute left-0 top-16 whitespace-nowrap font-display text-[24vw] leading-none text-outline opacity-20">
         {v.handle}

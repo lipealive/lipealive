@@ -12,7 +12,7 @@ export function Produtos() {
   const af = produtos.aliveFinance;
 
   return (
-    <section id="produtos" data-accent="alive" aria-labelledby="produtos-titulo" className="relative bg-ink py-16 text-white md:py-24">
+    <section id="produtos" data-accent="alive" aria-labelledby="produtos-titulo" className="scroll-mt-12 relative bg-ink py-16 text-white md:py-24">
       <div className="mx-auto w-full max-w-page px-4 sm:px-6">
         <Reveal>
           <p className="font-display text-xl uppercase tracking-[0.2em] text-accent">{produtos.eyebrow}</p>

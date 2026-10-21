@@ -1,48 +1,56 @@
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowDown, HardHat } from "lucide-react";
 import { site } from "@/content/site";
 import { Senha } from "@/components/senha";
-import { Recorte } from "@/components/recorte";
 
 /**
- * Hero: "QUANTAS VERSÕES DE VOCÊ EXISTEM?" + 4 cartas de personagem.
- * Hover (desktop) expande a carta; no mobile é uma pilha com swipe (snap).
+ * Hero: "QUANTAS VERSÕES DE VOCÊ EXISTEM?" + painel laranja com o recorte "saindo do quadro"
+ * + 4 cartas de personagem (hover expande no desktop; pilha com swipe no mobile).
  * Tudo visível no SSR; o contador rola ao carregar.
  */
 export function Hero() {
-  const { hero } = site;
+  const { hero, ensina } = site;
 
   return (
     <section id="top" data-accent="alive" className="relative overflow-hidden bg-ink text-white">
-      {/* brilho laranja */}
-      <div aria-hidden className="pointer-events-none absolute -right-[20%] -top-[10%] h-[70vw] w-[70vw] rounded-full bg-accent/30 blur-[120px]" />
-
-      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-8 sm:px-6 md:pt-12">
-        <div className="relative grid grid-cols-1 gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+      <div className="relative mx-auto w-full max-w-page px-4 pb-10 pt-20 sm:px-6 md:pt-24">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-end md:gap-12">
           <div className="relative z-10">
-            <p className="font-display text-xl uppercase tracking-[0.2em] text-accent">{hero.eyebrow}</p>
-            <h1 className="mt-3 font-display text-[clamp(3.6rem,13.5vw,10rem)] uppercase leading-[0.86] tracking-tight text-balance">
-              {hero.title}
-            </h1>
-            <p className="mt-5 text-lg text-white/80 sm:text-xl">{hero.subtitle}</p>
+            <h1 className="font-display text-[clamp(3.6rem,13.5vw,10rem)] uppercase leading-[0.86] tracking-tight text-balance">{hero.title}</h1>
+            <p className="mt-5 max-w-md text-lg text-white/80 sm:text-xl">{hero.subtitle}</p>
             <p className="mt-6 flex flex-col gap-1">
               <Senha value={hero.prova.value} onMount className="font-display text-[clamp(2.75rem,9vw,5.5rem)] text-accent" />
               <span className="max-w-xs text-sm text-white/70 sm:text-base">{hero.prova.label}</span>
             </p>
           </div>
 
-          {/* recorte grande saindo da composição */}
-          <div className="relative -mb-10 -mr-8 w-[82%] justify-self-end sm:-mr-12 md:-mb-16 md:w-full">
-            <Recorte recorte={hero.recorte} priority sizes="(min-width: 768px) 38vw, 80vw" className="drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)]" />
+          {/* painel laranja: recorte com a base cortada e a cabeça furando o topo */}
+          <div className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[3/4]">
+            <div className="absolute inset-x-0 bottom-0 top-[22%] overflow-hidden rounded-lg bg-accent">
+              <span aria-hidden className="pointer-events-none absolute -left-[4%] top-1/2 -translate-y-1/2 whitespace-nowrap font-display text-[min(38vw,15rem)] leading-none text-ink text-outline-2 opacity-40">
+                {hero.painelHandle}
+              </span>
+              {/* sombra de contato */}
+              <span aria-hidden className="absolute bottom-0 left-1/2 h-10 w-[70%] -translate-x-1/2 translate-y-1/2 rounded-[100%] bg-ink/50 blur-xl" />
+            </div>
+            <Image
+              src={hero.recorte.src}
+              alt={hero.recorte.alt}
+              width={hero.recorte.width}
+              height={hero.recorte.height}
+              priority
+              sizes="(min-width: 768px) 36vw, 92vw"
+              className="absolute bottom-[-4%] left-1/2 w-[96%] max-w-none -translate-x-1/2 select-none"
+              draggable={false}
+            />
           </div>
         </div>
 
         {/* cartas de personagem */}
-        <p className="mt-10 mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/60">{hero.cartasLabel}</p>
+        <p className="mb-3 mt-10 text-xs font-bold uppercase tracking-[0.2em] text-white/60">{hero.cartasLabel}</p>
         <ul
           aria-label={hero.cartasLabel}
-          className="relative z-10 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 no-scrollbar md:mx-0 md:h-[420px] md:gap-3 md:overflow-visible md:px-0 lg:h-[480px]"
+          className="relative z-10 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 no-scrollbar md:mx-0 md:h-[420px] md:overflow-visible md:px-0 lg:h-[480px]"
         >
           {site.versoes.map((v) => {
             const carta = site.cartas[v.slug];
@@ -56,36 +64,42 @@ export function Hero() {
                   href={`#${v.slug}`}
                   className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-lg bg-accent text-accent-foreground ring-offset-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
                 >
-                  {/* handle gigante atrás */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -left-2 top-1/2 origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap font-display text-[5rem] leading-none text-outline opacity-40 md:text-[6rem]"
-                  >
-                    {v.handle}
-                  </span>
+                  {/* fundo de cada tipo de carta */}
+                  {carta.tipo === "foto" && carta.foto && (
+                    <>
+                      <Image src={carta.foto} alt="" fill sizes="(min-width: 768px) 30vw, 72vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" style={{ objectPosition: carta.posicao }} />
+                      <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-accent to-transparent" />
+                    </>
+                  )}
 
-                  {/* imagem */}
-                  {carta.foto && (
-                    <Image src={carta.foto} alt="" fill sizes="(min-width: 768px) 30vw, 72vw" className="object-top-cover" />
-                  )}
-                  {carta.recorte && (
-                    <Image
-                      src={carta.recorte.src}
-                      alt=""
-                      width={carta.recorte.width}
-                      height={carta.recorte.height}
-                      sizes="(min-width: 768px) 30vw, 72vw"
-                      className="absolute bottom-0 left-1/2 h-[92%] w-auto max-w-none -translate-x-1/2 object-contain transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
-                  )}
-                  {carta.fita && (
-                    <span className="fita-obra absolute left-1/2 top-[52%] w-[160%] -translate-x-1/2 -rotate-12 py-1.5 text-center font-display text-2xl uppercase tracking-[0.3em] text-constroi">
-                      <span className="bg-ink px-3 py-0.5">{carta.fita}</span>
+                  {carta.tipo === "ensina" && (
+                    <span aria-hidden className="absolute inset-x-0 bottom-28 top-10 flex flex-col items-center justify-center gap-3 p-5 font-ensina md:bottom-32">
+                      <Image src={ensina.assinatura.src} alt="" width={ensina.assinatura.width} height={ensina.assinatura.height} unoptimized className="h-16 w-auto md:h-20" />
+                      <span className="font-display text-[4.5rem] uppercase leading-none md:text-[5.5rem]">{carta.seguidoresGrande}</span>
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-80">{site.ui.seguidores}</span>
+                      <span className="mt-2 flex gap-2">
+                        {ensina.marcos.map((m) => (
+                          <Image key={m.n} src={m.icone} alt="" width={40} height={40} unoptimized className="size-10 rounded-full bg-white" />
+                        ))}
+                      </span>
                     </span>
                   )}
 
-                  {/* gradiente de leitura */}
-                  {carta.foto && <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-accent to-transparent" />}
+                  {carta.tipo === "obra" && (
+                    <span aria-hidden className="blueprint absolute inset-0">
+                      <svg className="absolute inset-0 h-full w-full text-ink/50" viewBox="0 0 60 80" fill="none" stroke="currentColor" strokeWidth="0.5">
+                        <path className="cad-line" pathLength={1} d="M8 16 H52 V70 H8 Z M8 44 H52 M30 16 V70" />
+                        <path className="cad-line" pathLength={1} style={{ ["--draw-delay" as string]: "0.6s" }} d="M8 11 H52 M8 9 V13 M52 9 V13 M56 16 V70 M54 16 H58 M54 70 H58" />
+                        <path className="cad-line" pathLength={1} style={{ ["--draw-delay" as string]: "1s" }} d="M18 44 A12 12 0 0 1 30 32" />
+                      </svg>
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <HardHat className="size-10 text-ink/70" />
+                      </span>
+                      <span className="fita-obra absolute left-1/2 top-[40%] w-[170%] -translate-x-1/2 -rotate-12 py-1.5 text-center font-display text-2xl uppercase tracking-[0.3em] text-constroi">
+                        <span className="bg-ink px-3 py-0.5">{carta.fita}</span>
+                      </span>
+                    </span>
+                  )}
 
                   <span className="relative z-10 flex items-start justify-between p-4">
                     <span className="rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">{carta.tag}</span>
@@ -93,11 +107,7 @@ export function Hero() {
                   </span>
                   <span className="relative z-10 p-4">
                     <span className="block font-display text-4xl uppercase leading-[0.9] lg:text-5xl">{v.nome}</span>
-                    <span
-                      className={cn(
-                        "mt-2 block text-sm font-semibold transition-[opacity,transform] duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100",
-                      )}
-                    >
+                    <span className="mt-2 block text-sm font-semibold transition-[opacity,transform] duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
                       {v.handle} · {v.seguidores} {site.ui.seguidores}
                     </span>
                   </span>

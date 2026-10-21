@@ -16,7 +16,7 @@ export function Alive() {
   const { alive, ui } = site;
 
   return (
-    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="relative overflow-hidden bg-accent text-accent-foreground">
+    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 relative overflow-hidden bg-accent text-accent-foreground">
       <span aria-hidden className="pointer-events-none absolute left-0 top-10 whitespace-nowrap font-display text-[26vw] leading-none text-outline opacity-25 md:top-0">
         {v.handle}
       </span>

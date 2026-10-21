@@ -20,7 +20,7 @@ export function Ensina() {
   const geral = ctas.find((c) => !c.description);
 
   return (
-    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="relative overflow-hidden bg-accent font-ensina text-white">
+    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 relative overflow-hidden bg-accent font-ensina text-white">
       <span aria-hidden className="pointer-events-none absolute right-0 top-8 whitespace-nowrap font-display text-[24vw] leading-none text-outline opacity-20">
         {v.handle}
       </span>

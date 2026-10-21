@@ -11,7 +11,7 @@ export function Publicidade() {
   const { publicidade } = site;
 
   return (
-    <section id="publicidade" data-accent="alive" aria-labelledby="publicidade-titulo" className="relative overflow-hidden bg-paper text-ink">
+    <section id="publicidade" data-accent="alive" aria-labelledby="publicidade-titulo" className="scroll-mt-12 relative overflow-hidden bg-paper text-ink">
       <div className="mx-auto grid grid-cols-1 w-full max-w-page gap-8 px-4 pt-16 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-12 md:pt-24">
         <div className="pb-16 md:pb-24">
           <Reveal>
