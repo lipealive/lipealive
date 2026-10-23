@@ -47,7 +47,6 @@ export type Versao = {
   accent: Accent;
   destaques?: readonly string[];
   provas?: readonly Prova[];
-  youtube?: { url: string };
   fotos: { principal: Foto; secundaria?: Foto };
   recorte?: Recorte;
   ctas: readonly Cta[];
@@ -145,12 +144,11 @@ export const site = {
       accent: "alive",
       destaques: ["Diário de obra", "Treino", "Redbull", "Rango", "Eng."],
       provas: [{ stat: "aliveSeguidores", label: "seguidores no Instagram" }],
-      youtube: { url: "https://www.youtube.com/@LipeAlive" },
       fotos: {
         principal: { src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
         secundaria: { src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
       },
-      ctas: [{ label: "Inscrever no YouTube", href: "https://www.youtube.com/@LipeAlive" }],
+      ctas: [],
       posts: posts("lipe-alive", ["https://instagram.com/lipe.alive", "https://instagram.com/lipe.alive", "https://instagram.com/lipe.alive", "https://instagram.com/lipe.alive"]),
     },
     {
@@ -238,7 +236,42 @@ export const site = {
     } as Record<string, string | null>,
     /** object-position por destaque (padrão: topo). */
     destaquesPosicao: { "Diário de obra": "80% 45%" } as Record<string, string>,
-    youtubeTitle: "Últimos vídeos",
+    /** Mockup do perfil do Instagram na coluna direita (posts e seguindo são fixos; seguidores vêm do stats). */
+    perfil: {
+      username: "lipe.alive",
+      posts: 102,
+      seguindo: 659,
+      labels: { posts: "posts", seguidores: "seguidores", seguindo: "seguindo", seguir: "Seguir", verificado: "Verificado", grade: "Publicações" },
+      /** Menções viram links para a dobra da versão. */
+      bio: ["Aquele irmão mais velho que vc não teve", "🏗️ Eng Civil @lipe.constroi", "📚 Conteúdo digital @llipe.ensina", "🏋️ Híbrido @llipe.treina"],
+      grade: [
+        { src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
+        { src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
+        { src: "/fotos/lipe-obra-capacete.jpg", alt: "Lipe de capacete na obra", posicao: "78% 45%" },
+        { src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás", posicao: "45% 70%" },
+        { src: "/fotos/lipe-treino.jpg", alt: "Lipe treinando" },
+        { src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
+        { src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando" },
+        { src: "/fotos/lipe-close.jpg", alt: "Lipe em close" },
+        { src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
+      ] as readonly { src: string; alt: string; posicao?: string }[],
+    },
+  },
+
+  /** Dobra YouTube (canal @LipeAlive), entre o hero e o Lipe Alive. Vídeos de src/lib/data/youtube.ts. */
+  youtube: {
+    slug: "youtube",
+    /** Rótulo do segmento na barra de progresso. */
+    atalho: "YouTube",
+    titulo: "Lipe Alive no YouTube",
+    handle: "@LipeAlive",
+    frase: "O irmão mais velho que você não teve!",
+    url: "https://www.youtube.com/@LipeAlive",
+    inscrever: { label: "Inscrever-se", href: "https://www.youtube.com/@LipeAlive?sub_confirmation=1" },
+    verCanal: "Ver canal",
+    recenteLabel: "Mais recente",
+    tocarLabel: "Tocar",
+    playerTitle: "Player do YouTube",
   },
 
   /** Dobra Lipe Ensina (identidade do site lipeensina.com.br) */

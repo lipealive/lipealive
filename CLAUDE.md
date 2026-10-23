@@ -14,7 +14,7 @@
 2. **Nenhum texto, link, handle ou número hardcoded**: textos e links vêm de `src/content/site.ts`. Números (seguidores, inscritos, mentorados, total) vêm de `getStats()` em `src/lib/data/stats.ts` e vídeos de `getVideos()` em `src/lib/data/youtube.ts`, buscados no servidor com ISR (`fetch` + `revalidate`, nada no cliente). Fallbacks: `site.stats` e `src/content/youtube.json` (`npm run sync:youtube`). Formatação em `src/lib/numeros.ts` (`exato`, `compacto` arredondando para baixo, `totalArredondado`).
 3. Mobile-first (390px primeiro). Grids que têm filhos com scroll horizontal precisam de `grid-cols-1` (senão a coluna estoura). Sem scroll horizontal em 390px.
 4. Imagens via `next/image`. Fotos em `public/fotos/`, recortes WebP sem fundo em `public/fotos/recortes/` (tipo `Recorte`, com width/height), marcas em `public/marcas/{lipe-ensina,alive-finance}/`. Fotos do Constrói: `lipe-obra-pickup.jpg` (principal) e `lipe-obra-capacete.jpg` (rosto à direita: use object-position ~78% 45%). Foto ausente = placeholder.
-5. Cores por tokens em `src/app/globals.css`: dobra define `data-accent="alive|ensina|constroi|treina"` e usa `bg-accent`/`text-accent-foreground`. Cores reais: Alive `#FF5A1F`, Ensina `#0070D6` (site lipeensina), Constrói `#FFC400`, Treina `#E11D2E`; Alive Finance via `finance`, `finance-ink`.
+5. Cores por tokens em `src/app/globals.css`: dobra define `data-accent="alive|ensina|constroi|treina"` e usa `bg-accent`/`text-accent-foreground`. Cores reais: Alive `#FF5A1F`, Ensina `#0070D6` (site lipeensina), Constrói `#FFC400`, Treina `#E11D2E`, YouTube `#FF0033` (`data-accent="youtube"`, só a dobra do canal, não é versão); Alive Finance via `finance`, `finance-ink`.
 6. `prefers-reduced-motion` respeitado em tudo (CSS e hooks). CTAs magnéticos só com ponteiro fino (`Magnetic`).
 7. Sem tracking e sem deploy nesta etapa.
 
@@ -29,8 +29,8 @@
 - `scripts/lib/brand.mjs` — cores, desenho do ícone e texto Bebas Neue como path (fonte em `scripts/fonts/`, licença OFL)
 - `src/app/manifest.ts` — `/manifest.webmanifest`; `site.og` e `site.themeColor` em `site.ts`
 - `src/app/` — layout (SEO, fontes, lang pt-BR), page, globals.css
-- `src/components/sections/` — hero, alive, ensina, constroi, treina, produtos, publicidade
-- `src/components/` — stories-progress (barra fixa), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
+- `src/components/sections/` — hero, youtube (canal, entre o hero e o Alive), alive (só Instagram, mockup do perfil), ensina, constroi, treina, produtos, publicidade
+- `src/components/` — stories-progress (barra fixa: YouTube + 4 versões), youtube-player (lite embed nocookie, iframe só no clique), instagram-perfil (mockup do app), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
 - `src/lib/` — `utils.ts` (cn), `assets.ts` (checagem de arquivo em /public)
 
 ## Comandos

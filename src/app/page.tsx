@@ -3,6 +3,7 @@ import { StoriesProgress } from "@/components/stories-progress";
 import { Noise } from "@/components/noise";
 import { Marquee } from "@/components/marquee";
 import { Hero } from "@/components/sections/hero";
+import { Youtube } from "@/components/sections/youtube";
 import { Alive } from "@/components/sections/alive";
 import { Ensina } from "@/components/sections/ensina";
 import { Constroi } from "@/components/sections/constroi";
@@ -26,8 +27,10 @@ export default async function Home() {
       <StoriesProgress />
       <main>
         <Hero stats={stats} />
+        <Marquee itens={m} className="bg-white text-youtube" tilt={2} reverse />
+        <Youtube stats={stats} videos={videos} />
         <Marquee itens={m} className="bg-alive text-ink" />
-        <Alive stats={stats} videos={videos} />
+        <Alive stats={stats} />
         <Marquee itens={m} className="bg-ink text-white" tilt={2} reverse />
         <Ensina stats={stats} />
         <Marquee itens={m} className="bg-white text-ensina" />

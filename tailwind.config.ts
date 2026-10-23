@@ -17,6 +17,7 @@ const config: Config = {
         ensina: rgb("--ensina"),
         constroi: rgb("--constroi"),
         treina: rgb("--treina"),
+        youtube: rgb("--youtube"),
         ink: "#0b0b0c",
         paper: "#f3f1ec",
         /* Marca Alive Finance (kit em ../lipe-lp-financial) */

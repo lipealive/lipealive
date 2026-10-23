@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { site } from "@/content/site";
 
-const SLUGS = site.versoes.map((v) => v.slug);
+/** Segmentos da barra: YouTube + as 4 versões. */
+const SEGMENTOS = [
+  { slug: site.youtube.slug, nome: site.youtube.titulo, atalho: site.youtube.atalho, accent: "youtube" },
+  ...site.versoes.map((v) => ({ slug: v.slug, nome: v.nome, atalho: v.atalho, accent: v.accent as string })),
+];
+const SLUGS = SEGMENTOS.map((s) => s.slug);
 /** Todas as dobras com id, na ordem, e a cor que o header assume sobre cada uma. */
 const DOBRAS: { id: string; accent: string }[] = [
   { id: "top", accent: "ink" },
-  ...site.versoes.map((v) => ({ id: v.slug, accent: v.accent })),
+  ...SEGMENTOS.map((s) => ({ id: s.slug, accent: s.accent })),
   { id: "produtos", accent: "ink" },
   { id: "publicidade", accent: "paper" },
 ];
 const HEADER_H = 48;
 
 /**
- * Header fixo estilo Stories do Instagram: nome + um segmento por versão, que enche
+ * Header fixo estilo Stories do Instagram: nome + um segmento por dobra (YouTube e versões), que enche
  * conforme a rolagem dentro da dobra. Clicar pula para a versão.
  * O fundo assume a cor da dobra atual (85% + blur), com transição.
  */
@@ -61,7 +66,7 @@ export function StoriesProgress() {
         <a href="#top" className="mr-1 shrink-0 font-display text-lg uppercase leading-none sm:mr-2">
           {site.name}
         </a>
-        {site.versoes.map((v, i) => (
+        {SEGMENTOS.map((v, i) => (
           <a
             key={v.slug}
             href={`#${v.slug}`}

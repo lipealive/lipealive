@@ -20,6 +20,7 @@
     --ensina: 0 112 214; /* azul Lipe Ensina (#0070D6) */
     --constroi: 255 196 0; /* amarelo obra (#FFC400) */
     --treina: 225 29 46; /* vermelho (#E11D2E) */
+    --youtube: 255 0 51; /* vermelho YouTube (#FF0033), diferente do Treina */
 
     --accent: var(--alive);
     --on-accent: 11 11 12;
@@ -30,6 +31,7 @@
   [data-accent="ensina"] { --accent: var(--ensina); --on-accent: 255 255 255; }
   [data-accent="constroi"] { --accent: var(--constroi); --on-accent: 11 11 12; }
   [data-accent="treina"] { --accent: var(--treina); --on-accent: 255 255 255; }
+  [data-accent="youtube"] { --accent: var(--youtube); --on-accent: 255 255 255; }
   /* Header sobre dobras sem cor de versão */
   [data-accent="ink"] { --accent: 11 11 12; --on-accent: 255 255 255; }
   [data-accent="paper"] { --accent: 243 241 236; --on-accent: 11 11 12; }

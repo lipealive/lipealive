@@ -1,75 +1,37 @@
-import Image from "next/image";
-import { ArrowUpRight, HardHat, Play } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
 import { Senha } from "@/components/senha";
 import { Reveal } from "@/components/reveal";
 import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
-import { InstagramIcon, YoutubeIcon } from "@/components/icons";
+import { InstagramPerfil } from "@/components/instagram-perfil";
+import { InstagramIcon } from "@/components/icons";
 import { seguidoresDe, type Stats } from "@/lib/data/stats";
-import type { Video } from "@/lib/data/youtube";
-import { compacto, exato, valorDaProva } from "@/lib/numeros";
+import { compacto, valorDaProva } from "@/lib/numeros";
 
 const v = site.versoes[0];
 
-/** Dobra Lipe Alive: laranja chapado, destaques com foto e últimos vídeos do YouTube na coluna direita. */
-export function Alive({ stats, videos: ultimos }: { stats: Stats; videos: Video[] }) {
-  const { alive, ui } = site;
-
-  const videos = (
-    <ul className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 no-scrollbar md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0">
-      {ultimos.map((video) => (
-        <li key={video.id} className="w-[68vw] shrink-0 snap-start md:w-auto">
-          <a
-            href={video.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${ui.verVideo}: ${video.title}`}
-            className="group block overflow-hidden rounded-md border-2 border-ink bg-ink text-white"
-          >
-            <span className="relative block aspect-video overflow-hidden">
-              <Image src={video.thumb} alt="" fill sizes="(min-width: 768px) 22vw, 68vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-105" />
-              <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                <span className="flex size-11 items-center justify-center rounded-full bg-accent text-ink">
-                  <Play className="size-5 fill-current" aria-hidden />
-                </span>
-              </span>
-            </span>
-            <span className="line-clamp-2 block p-3 text-xs font-semibold leading-snug sm:text-sm">{video.title}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-
-  const videosHeader = v.youtube && (
-    <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-      <h3 className="font-display text-3xl uppercase leading-none sm:text-4xl">{alive.youtubeTitle}</h3>
-      <a href={v.youtube.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
-        <YoutubeIcon className="size-5" />
-        {compacto(stats.ytInscritos)} {ui.inscritos} · {exato(stats.ytVideos)} {ui.videos}
-        <ArrowUpRight className="size-4" aria-hidden />
-      </a>
-    </div>
-  );
+/** Dobra Lipe Alive (só Instagram): laranja chapado e mockup do perfil do app na coluna direita. */
+export function Alive({ stats }: { stats: Stats }) {
+  const { ui } = site;
+  const seguidores = seguidoresDe(stats, v.slug);
 
   return (
-    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 relative overflow-hidden bg-accent text-accent-foreground">
+    <section id={v.slug} data-accent={v.accent} aria-labelledby={`${v.slug}-titulo`} className="scroll-mt-12 relative overflow-clip bg-accent text-accent-foreground">
       <span aria-hidden className="pointer-events-none absolute left-0 top-10 whitespace-nowrap font-display text-[26vw] leading-none text-outline opacity-25 md:top-0">
         {v.handle}
       </span>
 
       <div className="relative mx-auto w-full max-w-page px-4 pb-16 pt-20 sm:px-6 md:pb-24 md:pt-28">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.05fr_0.95fr] md:items-start md:gap-16">
-          <div>
+          {/* desktop: acompanha a rolagem do mockup, que é mais alto */}
+          <div className="md:sticky md:top-28">
             <p className="flex flex-wrap items-center gap-x-3 text-sm font-semibold">
               <a href={v.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 underline-offset-4 hover:underline">
                 <InstagramIcon className="size-4" />
                 {v.handle}
               </a>
               <span className="opacity-70">
-                {compacto(seguidoresDe(stats, v.slug))} {ui.seguidores}
+                {compacto(seguidores)} {ui.seguidores}
               </span>
             </p>
             <h2 id={`${v.slug}-titulo`} className="mt-3 font-display text-[clamp(3.5rem,14.5vw,10rem)] uppercase leading-[0.86] tracking-tight">
@@ -85,26 +47,6 @@ export function Alive({ stats, videos: ultimos }: { stats: Stats; videos: Video[
               </p>
             )}
 
-            {/* destaques em bolinhas com foto */}
-            <Reveal className="mt-8">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] opacity-70">{alive.destaquesLabel}</p>
-              <ul className="-mx-4 flex gap-4 overflow-x-auto px-4 no-scrollbar md:mx-0 md:flex-wrap md:px-0">
-                {v.destaques?.map((d) => {
-                  const foto = alive.destaquesFotos[d];
-                  return (
-                    <li key={d} className="flex w-16 shrink-0 flex-col items-center gap-2 text-center">
-                      <span className="flex size-16 items-center justify-center rounded-full border-2 border-ink bg-ink p-[3px]">
-                        <span className={cn("relative size-full overflow-hidden rounded-full", !foto && "flex items-center justify-center bg-constroi text-ink")}>
-                          {foto ? <Image src={foto} alt="" fill sizes="64px" loading="lazy" className="object-top-cover" style={{ objectPosition: alive.destaquesPosicao[d] }} /> : <HardHat className="size-6" aria-hidden />}
-                        </span>
-                      </span>
-                      <span className="text-[11px] font-semibold leading-tight">{d}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </Reveal>
-
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
                 <CtaLink href={v.url} className="bg-ink text-white hover:bg-ink/90">
@@ -112,32 +54,12 @@ export function Alive({ stats, videos: ultimos }: { stats: Stats; videos: Video[
                   {ui.seguir}
                 </CtaLink>
               </Magnetic>
-              {v.youtube && (
-                <Magnetic>
-                  <CtaLink href={v.youtube.url} variant="outline" className="border-ink/40 text-ink hover:border-ink hover:text-ink">
-                    <YoutubeIcon className="size-5" />
-                    {v.ctas[0].label}
-                  </CtaLink>
-                </Magnetic>
-              )}
             </div>
-
-            {/* mobile: vídeos depois dos botões */}
-            {v.youtube && (
-              <Reveal className="mt-10 md:hidden">
-                {videosHeader}
-                <div className="mt-4">{videos}</div>
-              </Reveal>
-            )}
           </div>
 
-          {/* desktop: coluna direita alinhada pelo topo */}
-          {v.youtube && (
-            <Reveal className="hidden md:block">
-              {videosHeader}
-              <div className="mt-5">{videos}</div>
-            </Reveal>
-          )}
+          <Reveal className="mx-auto w-full max-w-[440px] md:mr-0">
+            <InstagramPerfil versao={v} seguidores={seguidores} />
+          </Reveal>
         </div>
       </div>
     </section>
