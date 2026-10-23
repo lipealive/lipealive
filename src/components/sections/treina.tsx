@@ -6,11 +6,13 @@ import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
 import { HyroxTimer } from "@/components/hyrox-timer";
 import { InstagramIcon } from "@/components/icons";
+import { seguidoresDe, type Stats } from "@/lib/data/stats";
+import { compacto, exato } from "@/lib/numeros";
 
 const v = site.versoes[3];
 
 /** Dobra Lipe Treina: vermelho/preto, cronômetro, ECG, palavras cinéticas e "COMFORT KILLS DREAMS". */
-export function Treina() {
+export function Treina({ stats }: { stats: Stats }) {
   const { treina, ui } = site;
   const palavras = [...treina.palavras, ...treina.palavras, ...treina.palavras];
 
@@ -25,7 +27,7 @@ export function Treina() {
               {v.handle}
             </a>
             <span className="ml-3 opacity-75">
-              {v.seguidores} {ui.seguidores}
+              {compacto(seguidoresDe(stats, v.slug))} {ui.seguidores}
             </span>
           </p>
         </div>
@@ -63,7 +65,7 @@ export function Treina() {
             <p className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">{v.headline}</p>
             <p className="mt-3 max-w-prose text-base leading-relaxed opacity-85">{v.descricao}</p>
             <p className="mt-6 flex flex-col">
-              <Senha value="44.300" className="font-display text-[clamp(3rem,10vw,6rem)]" />
+              <Senha value={exato(seguidoresDe(stats, v.slug))} className="font-display text-[clamp(3rem,10vw,6rem)]" />
               <span className="text-sm font-semibold uppercase tracking-[0.18em] opacity-75">{ui.seguidores}</span>
             </p>
 

@@ -3,6 +3,8 @@
  * Nenhum texto, link, handle ou número pode aparecer hardcoded nos componentes.
  */
 
+import type { StatKey } from "@/lib/data/stats";
+
 export type Accent = "alive" | "ensina" | "constroi" | "treina";
 
 export type Foto = {
@@ -27,15 +29,17 @@ export type Post = {
   tipo: "reel" | "post";
 };
 
-/** Número exibido com o contador "pega a senha". `value` é o texto final (ex.: "+2.000.000"). */
-export type Prova = { value: string; label: string };
+/**
+ * Número exibido com o contador "pega a senha". `value` é texto fixo (ex.: "120.000.000");
+ * `stat` puxa o número de src/lib/data/stats.ts (com fallback em `site.stats`).
+ */
+export type Prova = { label: string } & ({ value: string } | { stat: StatKey });
 
 export type Versao = {
   slug: string;
   nome: string;
   handle: string;
   url: string;
-  seguidores: string;
   /** Rótulo curto (barra de progresso e cartas). */
   atalho: string;
   headline: string;
@@ -43,7 +47,7 @@ export type Versao = {
   accent: Accent;
   destaques?: readonly string[];
   provas?: readonly Prova[];
-  youtube?: { url: string; inscritos: string; videos: string };
+  youtube?: { url: string };
   fotos: { principal: Foto; secundaria?: Foto };
   recorte?: Recorte;
   ctas: readonly Cta[];
@@ -107,10 +111,25 @@ export const site = {
       { slug: "lipe-treina", src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
       { slug: "lipe-alive", src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando", overlay: "Pega a senha." },
     ] as readonly { slug: string; src: string | null; alt: string; posicao?: string; fita?: string; overlay?: string }[],
-    prova: { value: "+2.000.000", label: "seguidores somando os 4 Instagrams e o YouTube" },
+    /** Total arredondado para baixo na centena de mil. */
+    prova: { stat: "total", label: "seguidores somando os 4 Instagrams e o YouTube" } as Prova,
     /** Título de um vídeo do Lipe no YouTube; vira o título da seção das cartas. */
     cartasLabel: "Quantas versões de você existem?",
     recorte: recortes.apontando,
+  },
+
+  /**
+   * Números de reserva: valem quando a fonte de src/lib/data/stats.ts falha ou está sem credencial.
+   * Atualize aqui de vez em quando para o fallback não envelhecer. `total` é sempre a soma.
+   */
+  stats: {
+    aliveSeguidores: 1_700_000,
+    ensinaSeguidores: 250_000,
+    constroiSeguidores: 39_600,
+    treinaSeguidores: 44_300,
+    ytInscritos: 48_600,
+    ytVideos: 249,
+    mentoradosSeguidores: 695_434,
   },
 
   versoes: [
@@ -119,14 +138,13 @@ export const site = {
       nome: "Lipe Alive",
       handle: "@lipe.alive",
       url: "https://instagram.com/lipe.alive",
-      seguidores: "1,7 mi",
       atalho: "Alive",
       headline: "Vida, rotina e vlog.",
       descricao: "O perfil principal. Diário de obra, treino, rango e a vida como ela é, sem roteiro. É aqui que tudo começa.",
       accent: "alive",
       destaques: ["Diário de obra", "Treino", "Redbull", "Rango", "Eng."],
-      provas: [{ value: "1.700.000", label: "seguidores no Instagram" }],
-      youtube: { url: "https://www.youtube.com/@LipeAlive", inscritos: "48,6 mil inscritos", videos: "249 vídeos" },
+      provas: [{ stat: "aliveSeguidores", label: "seguidores no Instagram" }],
+      youtube: { url: "https://www.youtube.com/@LipeAlive" },
       fotos: {
         principal: { src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
         secundaria: { src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
@@ -139,16 +157,15 @@ export const site = {
       nome: "Lipe Ensina",
       handle: "@llipe.ensina",
       url: "https://instagram.com/llipe.ensina",
-      seguidores: "250 mil",
       atalho: "Ensina",
       headline: "Carisma é uma habilidade treinável.",
       descricao: "Como gravar, falar e crescer no Instagram do jeito que o Lipe cresceu. Método, não sorte.",
       accent: "ensina",
       provas: [
-        { value: "1.700.000", label: "seguidores" },
+        { stat: "aliveSeguidores", label: "seguidores" },
         { value: "120.000.000", label: "de alcance orgânico mensal" },
         { value: "5.000", label: "pessoas ensinadas" },
-        { value: "695.434", label: "seguidores gerados para mentorados" },
+        { stat: "mentoradosSeguidores", label: "seguidores gerados para mentorados" },
       ],
       fotos: {
         principal: { src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
@@ -168,7 +185,6 @@ export const site = {
       nome: "Lipe Constrói",
       handle: "@lipe.constroi",
       url: "https://instagram.com/lipe.constroi",
-      seguidores: "39,6 mil",
       atalho: "Constrói",
       headline: "A rotina de obra de um engenheiro civil.",
       descricao: "Canteiro, projeto, gestão e os perrengues de quem toca obra de verdade. Para quem constrói ou quer construir.",
@@ -185,7 +201,6 @@ export const site = {
       nome: "Lipe Treina",
       handle: "@llipe.treina",
       url: "https://instagram.com/llipe.treina",
-      seguidores: "44,3 mil",
       atalho: "Treina",
       headline: "Hyrox, boxe e nutrição.",
       descricao: "Treino de verdade, sem fórmula mágica. O que o Lipe faz para aguentar a rotina, e o que ele come para isso.",
@@ -202,12 +217,12 @@ export const site = {
   cartas: {
     "lipe-alive": { tipo: "foto", foto: "/fotos/lipe-marina.jpg", posicao: "50% 12%", tag: "Vida e rotina" },
     /** Carta tipográfica: assinatura + seguidores + ícones do Roadmap. */
-    "lipe-ensina": { tipo: "ensina", foto: null, tag: "Carisma e conteúdo", seguidoresGrande: "250 mil" },
+    "lipe-ensina": { tipo: "ensina", foto: null, tag: "Carisma e conteúdo" },
     /** Selfie de capacete (rosto à direita); a fita "Em obra" fica embaixo, como detalhe. */
     "lipe-constroi": { tipo: "foto", foto: "/fotos/lipe-obra-capacete.jpg", posicao: "78% 45%", tag: "Obra e engenharia", fita: "Em obra" },
     /** Foco no boné e no tênis. */
     "lipe-treina": { tipo: "foto", foto: "/fotos/lipe-banco-treino.jpg", posicao: "50% 40%", tag: "Hyrox, boxe e nutrição" },
-  } as Record<string, { tipo: "foto" | "ensina" | "obra"; foto: string | null; posicao?: string; tag: string; fita?: string; seguidoresGrande?: string }>,
+  } as Record<string, { tipo: "foto" | "ensina" | "obra"; foto: string | null; posicao?: string; tag: string; fita?: string }>,
 
   /** Dobra Lipe Alive */
   alive: {
@@ -223,7 +238,6 @@ export const site = {
     /** object-position por destaque (padrão: topo). */
     destaquesPosicao: { "Diário de obra": "80% 45%" } as Record<string, string>,
     youtubeTitle: "Últimos vídeos",
-    youtubeNota: "Atualizado manualmente com npm run sync:youtube",
   },
 
   /** Dobra Lipe Ensina (identidade do site lipeensina.com.br) */
@@ -259,7 +273,7 @@ export const site = {
       { handle: "@marceloelzoc", seguidores: null, foto: "/marcas/lipe-ensina/mentorados/marceloelzoc.webp" },
       { handle: "@rodrigoarraisb", seguidores: null, foto: "/marcas/lipe-ensina/mentorados/rodrigoarraisb.webp" },
     ] as readonly { handle: string; seguidores: string | null; foto: string }[],
-    contador: { value: "695.434", label: "seguidores gerados para mentorados" },
+    contador: { stat: "mentoradosSeguidores", label: "seguidores gerados para mentorados" } as Prova,
     produtosTitle: "Por onde começar",
   },
 
@@ -312,10 +326,10 @@ export const site = {
     title: "Quer anunciar com o Lipe?",
     text: "Marcas que querem falar com mais de 2 milhões de pessoas, do jeito do Lipe. Fala com a equipe:",
     numeros: [
-      { value: "2.000.000", label: "seguidores" },
+      { stat: "total", label: "seguidores" },
       { value: "120.000.000", label: "de alcance mensal" },
       { value: "4", label: "perfis + YouTube" },
-    ],
+    ] as readonly Prova[],
     email: "lipealive@play9.com.br",
     ctaLabel: "Enviar e-mail",
     recorte: recortes.terno,
@@ -335,6 +349,8 @@ export const site = {
 
   ui: {
     seguidores: "seguidores",
+    inscritos: "inscritos",
+    videos: "vídeos",
     seguir: "Seguir no Instagram",
     verPost: "Ver no Instagram",
     verVideo: "Assistir no YouTube",

@@ -6,13 +6,15 @@ import { PhoneStories } from "@/components/phone-stories";
 import { PainelSenha } from "@/components/painel-senha";
 import { Selo } from "@/components/selo";
 import { VersaoAtualProvider } from "@/components/versao-atual";
+import { seguidoresDe, type Stats } from "@/lib/data/stats";
+import { compacto, valorDaProva } from "@/lib/numeros";
 
 /**
  * Hero: "PEGA A SENHA." + painel de senha sincronizado com o celular de stories (selo girando na quina)
  * + "QUANTAS VERSÕES DE VOCÊ EXISTEM?" com as 4 cartas (hover expande no desktop; swipe no mobile).
  * Tudo visível no SSR; o contador rola ao carregar.
  */
-export function Hero() {
+export function Hero({ stats }: { stats: Stats }) {
   const { hero, ensina } = site;
 
   return (
@@ -29,7 +31,7 @@ export function Hero() {
               <PainelSenha className="mt-6" />
               <p className="mt-5 max-w-md text-lg text-white/80 sm:text-xl">{hero.subtitle}</p>
               <p className="mt-6 flex flex-col gap-1">
-                <Senha value={hero.prova.value} onMount className="font-display text-[clamp(2.75rem,9vw,5.5rem)] text-accent" />
+                <Senha value={`+${valorDaProva(hero.prova, stats)}`} onMount className="font-display text-[clamp(2.75rem,9vw,5.5rem)] text-accent" />
                 <span className="max-w-xs text-sm text-white/70 sm:text-base">{hero.prova.label}</span>
               </p>
             </div>
@@ -72,7 +74,7 @@ export function Hero() {
                     {carta.tipo === "ensina" && (
                       <span aria-hidden className="absolute inset-x-0 bottom-28 top-10 flex flex-col items-center justify-center gap-3 p-5 font-ensina md:bottom-32">
                         <Image src={ensina.assinatura.src} alt="" width={ensina.assinatura.width} height={ensina.assinatura.height} unoptimized className="h-16 w-auto md:h-20" />
-                        <span className="font-display text-[4.5rem] uppercase leading-none md:text-[5.5rem]">{carta.seguidoresGrande}</span>
+                        <span className="font-display text-[4.5rem] uppercase leading-none md:text-[5.5rem]">{compacto(seguidoresDe(stats, v.slug))}</span>
                         <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-80">{site.ui.seguidores}</span>
                         <span className="mt-2 flex gap-2">
                           {ensina.marcos.map((m) => (
@@ -111,7 +113,7 @@ export function Hero() {
                     <span className="relative z-10 p-4">
                       <span className="block font-display text-4xl uppercase leading-[0.9] lg:text-5xl">{v.nome}</span>
                       <span className="mt-2 block text-sm font-semibold transition-[opacity,transform] duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
-                        {v.handle} · {v.seguidores} {site.ui.seguidores}
+                        {v.handle} · {compacto(seguidoresDe(stats, v.slug))} {site.ui.seguidores}
                       </span>
                     </span>
                   </a>

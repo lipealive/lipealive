@@ -2,22 +2,24 @@ import Image from "next/image";
 import { ArrowUpRight, HardHat, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
-import youtube from "@/content/youtube.json";
 import { Senha } from "@/components/senha";
 import { Reveal } from "@/components/reveal";
 import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
 import { InstagramIcon, YoutubeIcon } from "@/components/icons";
+import { seguidoresDe, type Stats } from "@/lib/data/stats";
+import type { Video } from "@/lib/data/youtube";
+import { compacto, exato, valorDaProva } from "@/lib/numeros";
 
 const v = site.versoes[0];
 
 /** Dobra Lipe Alive: laranja chapado, destaques com foto e últimos vídeos do YouTube na coluna direita. */
-export function Alive() {
+export function Alive({ stats, videos: ultimos }: { stats: Stats; videos: Video[] }) {
   const { alive, ui } = site;
 
   const videos = (
     <ul className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 no-scrollbar md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0">
-      {youtube.videos.map((video) => (
+      {ultimos.map((video) => (
         <li key={video.id} className="w-[68vw] shrink-0 snap-start md:w-auto">
           <a
             href={video.url}
@@ -46,7 +48,7 @@ export function Alive() {
       <h3 className="font-display text-3xl uppercase leading-none sm:text-4xl">{alive.youtubeTitle}</h3>
       <a href={v.youtube.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
         <YoutubeIcon className="size-5" />
-        {v.youtube.inscritos} · {v.youtube.videos}
+        {compacto(stats.ytInscritos)} {ui.inscritos} · {exato(stats.ytVideos)} {ui.videos}
         <ArrowUpRight className="size-4" aria-hidden />
       </a>
     </div>
@@ -67,7 +69,7 @@ export function Alive() {
                 {v.handle}
               </a>
               <span className="opacity-70">
-                {v.seguidores} {ui.seguidores}
+                {compacto(seguidoresDe(stats, v.slug))} {ui.seguidores}
               </span>
             </p>
             <h2 id={`${v.slug}-titulo`} className="mt-3 font-display text-[clamp(3.5rem,14.5vw,10rem)] uppercase leading-[0.86] tracking-tight">
@@ -78,7 +80,7 @@ export function Alive() {
 
             {v.provas && (
               <p className="mt-6 flex flex-col">
-                <Senha value={v.provas[0].value} className="font-display text-[clamp(3rem,10vw,6rem)]" />
+                <Senha value={valorDaProva(v.provas[0], stats)} className="font-display text-[clamp(3rem,10vw,6rem)]" />
                 <span className="text-sm font-semibold uppercase tracking-[0.18em] opacity-70">{v.provas[0].label}</span>
               </p>
             )}

@@ -6,11 +6,13 @@ import { Reveal } from "@/components/reveal";
 import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
 import { InstagramIcon } from "@/components/icons";
+import { seguidoresDe, type Stats } from "@/lib/data/stats";
+import { compacto, exato } from "@/lib/numeros";
 
 const v = site.versoes[2];
 
 /** Dobra Lipe Constrói: amarelo obra, planta baixa com linhas de CAD se desenhando, fita zebrada. */
-export function Constroi() {
+export function Constroi({ stats }: { stats: Stats }) {
   const { constroi, ui } = site;
 
   return (
@@ -83,7 +85,7 @@ export function Constroi() {
                 {v.handle}
               </a>
               <span className="opacity-70">
-                {v.seguidores} {ui.seguidores}
+                {compacto(seguidoresDe(stats, v.slug))} {ui.seguidores}
               </span>
             </p>
             <h2 id={`${v.slug}-titulo`} className="mt-3 font-display text-[clamp(3.5rem,14.5vw,10rem)] uppercase leading-[0.86] tracking-tight">
@@ -92,7 +94,7 @@ export function Constroi() {
             <p className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">{v.headline}</p>
             <p className="mt-3 max-w-prose text-base leading-relaxed opacity-80">{v.descricao}</p>
             <p className="mt-6 flex flex-col">
-              <Senha value="39.600" className="font-display text-[clamp(3rem,10vw,6rem)]" />
+              <Senha value={exato(seguidoresDe(stats, v.slug))} className="font-display text-[clamp(3rem,10vw,6rem)]" />
               <span className="text-sm font-semibold uppercase tracking-[0.18em] opacity-70">{ui.seguidores}</span>
             </p>
 

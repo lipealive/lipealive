@@ -5,9 +5,11 @@ import { Reveal } from "@/components/reveal";
 import { Recorte } from "@/components/recorte";
 import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
+import type { Stats } from "@/lib/data/stats";
+import { valorDaProva } from "@/lib/numeros";
 
 /** Mídia kit: fundo claro, recorte de terno e números para marcas. */
-export function Publicidade() {
+export function Publicidade({ stats }: { stats: Stats }) {
   const { publicidade } = site;
 
   return (
@@ -25,7 +27,7 @@ export function Publicidade() {
           <Reveal className="mt-8 flex flex-wrap gap-x-10 gap-y-5 border-y-2 border-ink py-5">
             {publicidade.numeros.map((n) => (
               <div key={n.label}>
-                <Senha value={n.value} className="font-display text-[clamp(1.6rem,5.5vw,3.5rem)]" />
+                <Senha value={valorDaProva(n, stats)} className="font-display text-[clamp(1.6rem,5.5vw,3.5rem)]" />
                 <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-ink/70 sm:text-xs">{n.label}</p>
               </div>
             ))}

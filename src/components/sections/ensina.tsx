@@ -9,11 +9,13 @@ import { CtaLink } from "@/components/cta-link";
 import { Magnetic } from "@/components/magnetic";
 import { RoadmapTrail } from "@/components/roadmap-trail";
 import { InstagramIcon } from "@/components/icons";
+import { seguidoresDe, type Stats } from "@/lib/data/stats";
+import { compacto, valorDaProva } from "@/lib/numeros";
 
 const v = site.versoes[1];
 
 /** Dobra Lipe Ensina: azul e tipografia do site lipeensina.com.br, trilha do Roadmap, muro de mentorados. */
-export function Ensina() {
+export function Ensina({ stats }: { stats: Stats }) {
   const { ensina, ui } = site;
   const ctas: readonly Cta[] = v.ctas;
   const cards = ctas.filter((c) => c.description);
@@ -36,7 +38,7 @@ export function Ensina() {
                   {v.handle}
                 </a>
                 <span className="ml-3 opacity-75">
-                  {v.seguidores} {ui.seguidores}
+                  {compacto(seguidoresDe(stats, v.slug))} {ui.seguidores}
                 </span>
               </p>
             </div>
@@ -59,7 +61,7 @@ export function Ensina() {
           <Reveal className="relative z-10 mt-10 grid grid-cols-1 grid-cols-2 gap-x-6 gap-y-6 rounded-lg bg-white/10 p-5 backdrop-blur md:grid-cols-4">
             {v.provas.map((p) => (
               <div key={p.label}>
-                <Senha value={`+${p.value}`} className="font-display text-[clamp(2rem,6vw,3.5rem)]" />
+                <Senha value={`+${valorDaProva(p, stats)}`} className="font-display text-[clamp(2rem,6vw,3.5rem)]" />
                 <p className="mt-1 text-xs leading-snug opacity-85 sm:text-sm">{p.label}</p>
               </div>
             ))}
@@ -123,7 +125,7 @@ export function Ensina() {
       <div className="relative mx-auto w-full max-w-page px-4 pb-20 pt-14 sm:px-6 md:pb-28">
         <Reveal>
           <p className="flex flex-col items-start">
-            <Senha value={`+${ensina.contador.value}`} className="font-display text-[clamp(3.5rem,13vw,9rem)]" />
+            <Senha value={`+${valorDaProva(ensina.contador, stats)}`} className="font-display text-[clamp(3.5rem,13vw,9rem)]" />
             <span className="text-base font-semibold uppercase tracking-[0.18em] opacity-85 sm:text-lg">{ensina.contador.label}</span>
           </p>
         </Reveal>
