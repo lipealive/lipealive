@@ -225,11 +225,12 @@ export const site = {
 
   /** Dobra Lipe Alive */
   alive: {
-    /** Mural com os posts reais mais recentes (src/lib/data/instagram-posts.ts). */
+    /** Colunas de posts em movimento: os 12 posts reais mais recentes (src/lib/data/instagram-posts.ts). */
     mural: {
       username: "lipe.alive",
-      /** Fitas adesivas por cima de algumas fotos (índice da foto → texto). */
-      fitas: { 0: "Stay Alive", 3: "Pega a senha", 4: "Stay Alive" } as Record<number, string>,
+      quantidade: 12,
+      /** Fitas adesivas por cima de algumas fotos (índice do post → texto). Pares vão à esquerda, ímpares à direita. */
+      fitas: { 0: "Stay Alive", 3: "Pega a senha", 4: "Pega a senha", 7: "Stay Alive", 10: "Stay Alive" } as Record<number, string>,
       verTudo: "Ver tudo no",
       abrir: "Abrir post no Instagram",
       reel: "Reel",
@@ -244,6 +245,10 @@ export const site = {
         { src: "/fotos/lipe-treino.jpg", alt: "Lipe treinando" },
         { src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
         { src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás", posicao: "45% 70%" },
+        { src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando" },
+        { src: "/fotos/lipe-close.jpg", alt: "Lipe em close" },
+        { src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
+        { src: "/fotos/lipe-terno.jpg", alt: "Lipe de terno" },
       ] as readonly { src: string; alt: string; posicao?: string }[],
     },
   },

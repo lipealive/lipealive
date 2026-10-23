@@ -30,8 +30,8 @@
 - `scripts/lib/brand.mjs` — cores, desenho do ícone e texto Bebas Neue como path (fonte em `scripts/fonts/`, licença OFL)
 - `src/app/manifest.ts` — `/manifest.webmanifest`; `site.og` e `site.themeColor` em `site.ts`
 - `src/app/` — layout (SEO, fontes, lang pt-BR), page, globals.css
-- `src/components/sections/` — hero, youtube (canal, entre o hero e o Alive), alive (só Instagram, mural com os posts reais), ensina, constroi, treina, produtos, publicidade
-- `src/components/` — stories-progress (barra fixa: YouTube + 4 versões), youtube-player (lite embed nocookie, iframe só no clique), mural-instagram (colagem dos posts; queda no scroll via mural-queda), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
+- `src/components/sections/` — hero, youtube (canal, entre o hero e o Alive), alive (só Instagram: texto central entre duas colunas de posts reais em loop; no mobile, duas faixas horizontais), ensina, constroi, treina, produtos, publicidade
+- `src/components/` — stories-progress (barra fixa: YouTube + 4 versões), youtube-player (lite embed nocookie, iframe só no clique), esteira-posts (loop CSS de 3 cópias + aceleração pelo scroll com motion; pausa no hover e fora da tela), polaroid (foto impressa de um post), mural-imagem (troca para foto local no onError), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
 - `src/lib/` — `utils.ts` (cn), `assets.ts` (checagem de arquivo em /public)
 
 ## Comandos

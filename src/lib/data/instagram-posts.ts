@@ -67,7 +67,7 @@ export async function getInstagramPosts(username: string, fallback: readonly Ins
 
   const params = new URLSearchParams({
     fields: "id,media_type,media_url,thumbnail_url,permalink,caption,timestamp,like_count,comments_count,children{media_type,media_url,thumbnail_url}",
-    limit: String(BUSCAR),
+    limit: String(Math.max(BUSCAR, limite)),
     access_token: token,
   });
   const r = await ler<{ data?: Midia[] }>(`[instagram] @${username}`, `${GRAPH}/${id}/media?${params}`, { revalidate: REVALIDATE, tags: [INSTAGRAM_TAG] });

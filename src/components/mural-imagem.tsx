@@ -8,8 +8,9 @@ type Foto = { src: string; posicao?: string };
 /**
  * Foto do mural com rede de segurança: se a URL do CDN do Instagram expirou (ou falhou),
  * troca pela foto local de reserva. O tamanho vem da moldura (fill), então o layout não muda.
+ * `baixa`: cópias do loop das colunas carregam depois das originais (fetchPriority low).
  */
-export function MuralImagem({ foto, reserva, alt, sizes }: { foto: Foto; reserva: Foto; alt: string; sizes: string }) {
+export function MuralImagem({ foto, reserva, alt, sizes, baixa = false }: { foto: Foto; reserva: Foto; alt: string; sizes: string; baixa?: boolean }) {
   const [falhou, setFalhou] = useState(false);
   const atual = falhou ? reserva : foto;
   return (
@@ -20,6 +21,7 @@ export function MuralImagem({ foto, reserva, alt, sizes }: { foto: Foto; reserva
       fill
       sizes={sizes}
       loading="lazy"
+      fetchPriority={baixa ? "low" : undefined}
       className="object-cover"
       style={{ objectPosition: atual.posicao }}
       onError={falhou ? undefined : () => setFalhou(true)}

@@ -18,21 +18,18 @@ import { getInstagramPosts, type InstagramPost } from "@/lib/data/instagram-post
 const m = site.marquee.itens;
 const v = site.versoes[0];
 
-/** Fallback do mural: fotos locais linkando para o perfil. */
-const muralFallback: InstagramPost[] = site.alive.mural.fallback.map((f) => ({
-  id: f.src,
-  tipo: "imagem",
-  imagem: f.src,
-  posicao: f.posicao,
-  permalink: v.url,
-  legenda: f.alt,
-}));
+/** Fallback das colunas de posts: fotos locais (em ciclo até a quantidade) linkando para o perfil. */
+const { mural } = site.alive;
+const muralFallback: InstagramPost[] = Array.from({ length: mural.quantidade }, (_, i) => {
+  const f = mural.fallback[i % mural.fallback.length];
+  return { id: `${f.src}#${i}`, tipo: "imagem", imagem: f.src, posicao: f.posicao, permalink: v.url, legenda: f.alt };
+});
 
 /** ISR: a página regera a cada 1 h (vídeos); posts do Instagram a cada 3 dias e números a cada 7 (ver src/lib/data). */
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [stats, videos, posts] = await Promise.all([getStats(), getVideos(), getInstagramPosts(site.alive.mural.username, muralFallback)]);
+  const [stats, videos, posts] = await Promise.all([getStats(), getVideos(), getInstagramPosts(mural.username, muralFallback, mural.quantidade)]);
 
   return (
     <>
