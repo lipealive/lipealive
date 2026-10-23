@@ -1,5 +1,8 @@
 import { site, type VersaoSlug } from "@/content/site";
 import { CHANNEL_ID } from "@/lib/data/youtube";
+import { ler } from "@/lib/data/fetch";
+import { contasInstagram } from "@/lib/data/meta";
+import { STATS_TAG } from "@/lib/data/tags";
 
 export type Stats = {
   aliveSeguidores: number;
@@ -17,7 +20,7 @@ export type Stats = {
 
 export type StatKey = Exclude<keyof Stats, "atualizadoEm">;
 
-export const STATS_TAG = "stats";
+export { STATS_TAG };
 const REVALIDATE = 604800; // 7 dias
 
 /** Campo de seguidores de cada versão; o username do Instagram sai do `handle`. */
@@ -32,19 +35,9 @@ export function seguidoresDe(stats: Stats, slug: VersaoSlug) {
   return stats[SEGUIDORES_POR_SLUG[slug]];
 }
 
-type Lido<T> = { data: T; em: string | null };
-
-/** GET com cache de 7 dias. Erro vira log no servidor e `null` (nunca derruba a página). */
-async function ler<T>(fonte: string, url: string, tipo: "json" | "text" = "json"): Promise<Lido<T> | null> {
-  try {
-    const res = await fetch(url, { next: { revalidate: REVALIDATE, tags: [STATS_TAG] } });
-    if (!res.ok) throw new Error(`HTTP ${res.status} ${(await res.text()).replace(/\s+/g, " ").slice(0, 200)}`);
-    const data = (tipo === "json" ? await res.json() : await res.text()) as T;
-    return { data, em: res.headers.get("date") };
-  } catch (e) {
-    console.error(`[stats] ${fonte}: ${e instanceof Error ? e.message : String(e)}`);
-    return null;
-  }
+/** GET com cache de 7 dias e tag `stats`. */
+function lerStats<T>(fonte: string, url: string, tipo: "json" | "text" = "json") {
+  return ler<T>(`[stats] ${fonte}`, url, { revalidate: REVALIDATE, tags: [STATS_TAG] }, tipo);
 }
 
 /** Inteiro positivo ou `null` (loga quando a fonte respondeu algo inválido). */
@@ -58,22 +51,16 @@ function inteiro(fonte: string, v: unknown): number | null {
 type Medida = { valor: number | null; em: string | null };
 const vazio: Medida = { valor: null, em: null };
 
-type ContasMeta = { data?: { instagram_business_account?: { username?: string; followers_count?: unknown } }[] };
-
 /**
- * Instagram Graph API: UMA chamada em me/accounts; cada página do portfólio com Instagram vinculado
- * traz o seu perfil, mapeado por username. Perfil que não aparece (ainda fora do portfólio) fica na
- * reserva sem erro e passa a valer sozinho quando entrar. Sem META_TOKEN: reserva.
+ * Seguidores dos perfis do portfólio (uma chamada em me/accounts, ver meta.ts), por username.
+ * Perfil que não aparece fica na reserva sem erro e passa a valer sozinho quando entrar.
  */
 async function instagram(): Promise<Map<string, Medida>> {
   const perfis = new Map<string, Medida>();
-  const token = process.env.META_TOKEN;
-  if (!token) return perfis;
-  const params = new URLSearchParams({ fields: "instagram_business_account{username,followers_count,media_count}", limit: "100", access_token: token });
-  const r = await ler<ContasMeta>("instagram", `https://graph.facebook.com/v21.0/me/accounts?${params}`);
-  for (const { instagram_business_account: ig } of r?.data.data ?? []) {
-    if (ig?.username) perfis.set(ig.username.toLowerCase(), { valor: inteiro(`instagram @${ig.username}`, ig.followers_count), em: r!.em });
-  }
+  const r = await contasInstagram();
+  r?.contas.forEach((conta, username) => {
+    perfis.set(username, { valor: inteiro(`instagram @${conta.username}`, conta.followers_count), em: r.em });
+  });
   return perfis;
 }
 
@@ -82,7 +69,7 @@ async function youtube(): Promise<{ inscritos: Medida; videos: Medida }> {
   const key = process.env.YOUTUBE_API_KEY;
   if (!key) return { inscritos: vazio, videos: vazio };
   const params = new URLSearchParams({ part: "statistics", id: CHANNEL_ID, key });
-  const r = await ler<{ items?: { statistics?: { subscriberCount?: unknown; videoCount?: unknown } }[] }>("youtube", `https://www.googleapis.com/youtube/v3/channels?${params}`);
+  const r = await lerStats<{ items?: { statistics?: { subscriberCount?: unknown; videoCount?: unknown } }[] }>("youtube", `https://www.googleapis.com/youtube/v3/channels?${params}`);
   if (!r) return { inscritos: vazio, videos: vazio };
   const st = r.data.items?.[0]?.statistics;
   return {
@@ -98,11 +85,11 @@ async function youtube(): Promise<{ inscritos: Medida; videos: Medida }> {
  * JSON `#lpm-cfg` embutido na página.
  */
 async function mentorados(): Promise<Medida> {
-  const api = await ler<{ total?: unknown }>("mentorados api", "https://lp.lipeensina.com.br/wp-json/lpm/v1/seguidores");
+  const api = await lerStats<{ total?: unknown }>("mentorados api", "https://lp.lipeensina.com.br/wp-json/lpm/v1/seguidores");
   const total = api && inteiro("mentorados api", api.data.total);
   if (api && total) return { valor: total, em: api.em };
 
-  const pagina = await ler<string>("mentorados página", "https://lp.lipeensina.com.br/depoimentos/", "text");
+  const pagina = await lerStats<string>("mentorados página", "https://lp.lipeensina.com.br/depoimentos/", "text");
   const cfg = pagina?.data.match(/<script[^>]*id="lpm-cfg"[^>]*>([\s\S]*?)<\/script>/)?.[1];
   if (!pagina || !cfg) {
     if (pagina) console.error("[stats] mentorados página: #lpm-cfg não encontrado");

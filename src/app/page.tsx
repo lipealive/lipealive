@@ -13,14 +13,26 @@ import { Publicidade } from "@/components/sections/publicidade";
 import { Footer } from "@/components/footer";
 import { getStats } from "@/lib/data/stats";
 import { getVideos } from "@/lib/data/youtube";
+import { getInstagramPosts, type InstagramPost } from "@/lib/data/instagram-posts";
 
 const m = site.marquee.itens;
+const v = site.versoes[0];
 
-/** ISR: vídeos revalidam a cada 1 h, números a cada 7 dias (ver src/lib/data). */
+/** Fallback do mural: fotos locais linkando para o perfil. */
+const muralFallback: InstagramPost[] = site.alive.mural.fallback.map((f) => ({
+  id: f.src,
+  tipo: "imagem",
+  imagem: f.src,
+  posicao: f.posicao,
+  permalink: v.url,
+  legenda: f.alt,
+}));
+
+/** ISR: vídeos e posts revalidam a cada 1 h, números a cada 7 dias (ver src/lib/data). */
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [stats, videos] = await Promise.all([getStats(), getVideos()]);
+  const [stats, videos, posts] = await Promise.all([getStats(), getVideos(), getInstagramPosts(site.alive.mural.username, muralFallback)]);
 
   return (
     <>
@@ -30,7 +42,7 @@ export default async function Home() {
         <Marquee itens={m} className="bg-white text-youtube" tilt={2} reverse />
         <Youtube stats={stats} videos={videos} />
         <Marquee itens={m} className="bg-alive text-ink" />
-        <Alive stats={stats} />
+        <Alive stats={stats} posts={posts} />
         <Marquee itens={m} className="bg-ink text-white" tilt={2} reverse />
         <Ensina stats={stats} />
         <Marquee itens={m} className="bg-white text-ensina" />

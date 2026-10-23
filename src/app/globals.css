@@ -120,6 +120,38 @@
 @keyframes selo-gira { to { transform: rotate(360deg); } }
 .selo-gira { transform-origin: 50px 50px; animation: selo-gira 18s linear infinite; }
 
+/* ---------- Mural de posts (Lipe Alive) ---------- */
+/* .mural-item: queda no scroll · .mural-foto: rotação/deslocamento da colagem e hover */
+.mural-item { z-index: 1; }
+.mural-foto {
+  transform: translate3d(var(--x, 0), var(--y, 0), 0) rotate(var(--r, 0deg));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+}
+@media (max-width: 767px) {
+  .mural-foto { transform: rotate(calc(var(--r, 0deg) * 0.5)); }
+}
+.mural-info { opacity: 0; transition: opacity 0.25s; }
+@media (hover: hover) and (pointer: fine) {
+  .mural-item:hover, .mural-item:focus-within { z-index: 30; }
+  .mural-item:hover .mural-foto, .mural-item:focus-within .mural-foto {
+    transform: translate3d(var(--x, 0), calc(var(--y, 0) - 14px), 0) rotate(0deg) scale(1.08);
+    box-shadow: 0 30px 50px -18px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .mural-item:hover .mural-info, .mural-item:focus-within .mural-info { opacity: 1; }
+}
+[data-mural="armado"] .mural-item { opacity: 0; transform: translate3d(0, -56px, 0) rotate(-9deg) scale(1.12); }
+[data-mural="caiu"] .mural-item {
+  transition: opacity 0.4s ease-out, transform 0.75s cubic-bezier(0.22, 1.45, 0.4, 1);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+/* fita adesiva semitransparente com bordas serrilhadas */
+.fita-adesiva {
+  background: rgba(250, 246, 232, 0.62);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(1px);
+  clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
+}
+
 /* ---------- Granulação ---------- */
 .noise {
   position: fixed;
@@ -172,6 +204,8 @@
   .cad-line, .ecg-line { animation: none; stroke-dashoffset: 0; }
   .senha-strip { transition: none; }
   .painel-ding, .painel-nome, .selo-gira { animation: none; }
+  .mural-foto { transition: none; }
+  [data-mural="armado"] .mural-item { opacity: 1; transform: none; }
   [data-reveal="hidden"] { opacity: 1; transform: none; }
   .story-img { animation: none !important; }
 }

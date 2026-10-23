@@ -2,7 +2,9 @@ import fallback from "@/content/youtube.json";
 
 export type Video = (typeof fallback.videos)[number];
 
-export const YOUTUBE_TAG = "youtube";
+import { YOUTUBE_TAG } from "@/lib/data/tags";
+
+export { YOUTUBE_TAG };
 /** Mesmo canal do scripts/sync-youtube.mjs (que grava o id no JSON). */
 export const CHANNEL_ID = fallback.channelId;
 

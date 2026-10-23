@@ -23,6 +23,23 @@ export function totalArredondado(n: number) {
   return exato(Math.floor(n / 1e5) * 1e5);
 }
 
+const relativoFmt = new Intl.RelativeTimeFormat("pt-BR", { numeric: "always" });
+const UNIDADES: [Intl.RelativeTimeFormatUnit, number][] = [
+  ["year", 31536000],
+  ["month", 2592000],
+  ["week", 604800],
+  ["day", 86400],
+  ["hour", 3600],
+  ["minute", 60],
+];
+
+/** Data relativa pt-BR, sempre para baixo: "há 2 dias", "há 3 semanas" (menos de 1 min: "há 1 minuto"). */
+export function haQuanto(iso: string, agora = Date.now()) {
+  const s = Math.max(0, (agora - Date.parse(iso)) / 1000);
+  for (const [unidade, seg] of UNIDADES) if (s >= seg) return relativoFmt.format(-Math.floor(s / seg), unidade);
+  return relativoFmt.format(-1, "minute");
+}
+
 /** Texto final de uma prova: fixo (`value`) ou do stats (o `total` sai sempre arredondado). */
 export function valorDaProva(p: Prova, stats: Stats) {
   if ("value" in p) return p.value;

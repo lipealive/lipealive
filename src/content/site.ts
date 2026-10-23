@@ -225,35 +225,25 @@ export const site = {
 
   /** Dobra Lipe Alive */
   alive: {
-    destaquesLabel: "Destaques",
-    /** Foto de cada destaque (crop redondo). `null` = placeholder amarelo com capacete. */
-    destaquesFotos: {
-      "Diário de obra": "/fotos/lipe-obra-capacete.jpg",
-      Treino: "/fotos/lipe-banco-treino.jpg",
-      Redbull: "/fotos/lipe-carro.jpg",
-      Rango: "/fotos/lipe-marina.jpg",
-      "Eng.": "/fotos/lipe-close.jpg",
-    } as Record<string, string | null>,
-    /** object-position por destaque (padrão: topo). */
-    destaquesPosicao: { "Diário de obra": "80% 45%" } as Record<string, string>,
-    /** Mockup do perfil do Instagram na coluna direita (posts e seguindo são fixos; seguidores vêm do stats). */
-    perfil: {
+    /** Mural com os posts reais mais recentes (src/lib/data/instagram-posts.ts). */
+    mural: {
       username: "lipe.alive",
-      posts: 102,
-      seguindo: 659,
-      labels: { posts: "posts", seguidores: "seguidores", seguindo: "seguindo", seguir: "Seguir", verificado: "Verificado", grade: "Publicações" },
-      /** Menções viram links para a dobra da versão. */
-      bio: ["Aquele irmão mais velho que vc não teve", "🏗️ Eng Civil @lipe.constroi", "📚 Conteúdo digital @llipe.ensina", "🏋️ Híbrido @llipe.treina"],
-      grade: [
+      /** Fitas adesivas por cima de algumas fotos (índice da foto → texto). */
+      fitas: { 0: "Stay Alive", 3: "Pega a senha", 4: "Stay Alive" } as Record<number, string>,
+      verTudo: "Ver tudo no",
+      abrir: "Abrir post no Instagram",
+      reel: "Reel",
+      carrossel: "Carrossel",
+      curtidas: "curtidas",
+      comentarios: "comentários",
+      /** Sem token ou com erro: fotos locais linkando para o perfil. */
+      fallback: [
         { src: "/fotos/lipe-marina.jpg", alt: "Lipe na marina" },
         { src: "/fotos/lipe-carro.jpg", alt: "Lipe no carro" },
         { src: "/fotos/lipe-obra-capacete.jpg", alt: "Lipe de capacete na obra", posicao: "78% 45%" },
-        { src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás", posicao: "45% 70%" },
         { src: "/fotos/lipe-treino.jpg", alt: "Lipe treinando" },
         { src: "/fotos/lipe-banco-treino.jpg", alt: "Lipe no banco da academia" },
-        { src: "/fotos/lipe-apontando.jpg", alt: "Lipe apontando" },
-        { src: "/fotos/lipe-close.jpg", alt: "Lipe em close" },
-        { src: "/fotos/lipe-banco.jpg", alt: "Lipe sentado em um banco" },
+        { src: "/fotos/lipe-obra-pickup.jpg", alt: "Lipe na frente da pickup, com prédio em obra atrás", posicao: "45% 70%" },
       ] as readonly { src: string; alt: string; posicao?: string }[],
     },
   },

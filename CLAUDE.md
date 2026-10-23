@@ -22,15 +22,16 @@
 - `src/content/site.ts` — conteúdo tipado (fonte única) + `stats` de reserva; `src/content/youtube.json` — fallback dos vídeos
 - `src/lib/data/stats.ts` — números com ISR de 7 dias (tag `stats`): Instagram Graph API (`me/accounts`, só perfis do portfólio; o resto fica na reserva), YouTube Data API v3, API de mentorados do Lipe Ensina (`/wp-json/lpm/v1/seguidores`). Envs em `.env.example`
 - `src/lib/data/youtube.ts` — 4 vídeos longos via RSS da playlist `UULF…` (ISR 1 h, tag `youtube`)
-- `src/app/api/revalidate/route.ts` — força atualizar (`x-revalidate-secret` ou `?secret=`, `?tag=stats|youtube`)
+- `src/lib/data/instagram-posts.ts` — `getInstagramPosts(username, fallback)`: posts recentes de um perfil do portfólio via Graph API (ISR 1 h, tag `instagram`; URLs do CDN expiram). Id da conta vem de `meta.ts` (`me/accounts`, compartilhado com os números). `fetch.ts` = GET com log; `tags.ts` = tags do cache
+- `src/app/api/revalidate/route.ts` — força atualizar (`x-revalidate-secret` ou `?secret=`, `?tag=stats|youtube|instagram`)
 - `scripts/sync-youtube.mjs` — lê o RSS dos vídeos longos (channel_id em `CHANNEL_ID`) e grava o JSON de fallback
 - `scripts/build-icons.mjs` — gera `src/app/{icon.svg,favicon.ico,apple-icon.png}` e `public/icon-{192,512,maskable-512}.png`. Abaixo de 48px usa a versão simples ("L" + barra laranja); a partir de 48px, "L" + 4 barras das versões
 - `scripts/build-og.mjs` — gera `public/og.jpg` (1200x630, < 300 KB, estático de propósito por causa do WhatsApp). Headline e as 2 primeiras tiras ficam no quadrado central 630x630. Enquadramento das fotos em `STRIPS`
 - `scripts/lib/brand.mjs` — cores, desenho do ícone e texto Bebas Neue como path (fonte em `scripts/fonts/`, licença OFL)
 - `src/app/manifest.ts` — `/manifest.webmanifest`; `site.og` e `site.themeColor` em `site.ts`
 - `src/app/` — layout (SEO, fontes, lang pt-BR), page, globals.css
-- `src/components/sections/` — hero, youtube (canal, entre o hero e o Alive), alive (só Instagram, mockup do perfil), ensina, constroi, treina, produtos, publicidade
-- `src/components/` — stories-progress (barra fixa: YouTube + 4 versões), youtube-player (lite embed nocookie, iframe só no clique), instagram-perfil (mockup do app), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
+- `src/components/sections/` — hero, youtube (canal, entre o hero e o Alive), alive (só Instagram, mural com os posts reais), ensina, constroi, treina, produtos, publicidade
+- `src/components/` — stories-progress (barra fixa: YouTube + 4 versões), youtube-player (lite embed nocookie, iframe só no clique), mural-instagram (colagem dos posts; queda no scroll via mural-queda), reveal, senha (contador), marquee, magnetic, noise, phone-stories, roadmap-trail, hyrox-timer, recorte, foto, cta-link, icons, footer
 - `src/lib/` — `utils.ts` (cn), `assets.ts` (checagem de arquivo em /public)
 
 ## Comandos
