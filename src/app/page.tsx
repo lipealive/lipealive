@@ -28,7 +28,7 @@ const muralFallback: InstagramPost[] = site.alive.mural.fallback.map((f) => ({
   legenda: f.alt,
 }));
 
-/** ISR: vídeos e posts revalidam a cada 1 h, números a cada 7 dias (ver src/lib/data). */
+/** ISR: a página regera a cada 1 h (vídeos); posts do Instagram a cada 3 dias e números a cada 7 (ver src/lib/data). */
 export const revalidate = 3600;
 
 export default async function Home() {

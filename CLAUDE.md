@@ -22,7 +22,7 @@
 - `src/content/site.ts` — conteúdo tipado (fonte única) + `stats` de reserva; `src/content/youtube.json` — fallback dos vídeos
 - `src/lib/data/stats.ts` — números com ISR de 7 dias (tag `stats`): Instagram Graph API (`me/accounts`, só perfis do portfólio; o resto fica na reserva), YouTube Data API v3, API de mentorados do Lipe Ensina (`/wp-json/lpm/v1/seguidores`). Envs em `.env.example`
 - `src/lib/data/youtube.ts` — 4 vídeos longos via RSS da playlist `UULF…` (ISR 1 h, tag `youtube`)
-- `src/lib/data/instagram-posts.ts` — `getInstagramPosts(username, fallback)`: posts recentes de um perfil do portfólio via Graph API (ISR 1 h, tag `instagram`; URLs do CDN expiram). Id da conta vem de `meta.ts` (`me/accounts`, compartilhado com os números). `fetch.ts` = GET com log; `tags.ts` = tags do cache
+- `src/lib/data/instagram-posts.ts` — `getInstagramPosts(username, fallback)`: posts recentes de um perfil do portfólio via Graph API (ISR 3 dias, tag `instagram`; URLs do CDN expiram em ~4 dias pelo `oe`, e o mural cai na foto local no `onError`). Id da conta vem de `meta.ts` (`me/accounts`, compartilhado com os números). `fetch.ts` = GET com log; `tags.ts` = tags do cache
 - `src/app/api/revalidate/route.ts` — força atualizar (`x-revalidate-secret` ou `?secret=`, `?tag=stats|youtube|instagram`)
 - `scripts/sync-youtube.mjs` — lê o RSS dos vídeos longos (channel_id em `CHANNEL_ID`) e grava o JSON de fallback
 - `scripts/build-icons.mjs` — gera `src/app/{icon.svg,favicon.ico,apple-icon.png}` e `public/icon-{192,512,maskable-512}.png`. Abaixo de 48px usa a versão simples ("L" + barra laranja); a partir de 48px, "L" + 4 barras das versões

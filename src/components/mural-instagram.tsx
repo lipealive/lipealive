@@ -1,8 +1,8 @@
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import { ArrowUpRight, Clapperboard, Copy, Heart, MessageCircle } from "lucide-react";
 import { site } from "@/content/site";
 import { MuralQueda } from "@/components/mural-queda";
+import { MuralImagem } from "@/components/mural-imagem";
 import type { InstagramPost } from "@/lib/data/instagram-posts";
 import { compacto, haQuanto } from "@/lib/numeros";
 
@@ -32,6 +32,7 @@ export function MuralInstagram({ posts, perfilUrl, handle }: { posts: readonly I
           {posts.map((p, i) => {
             const l = LAYOUT[i % LAYOUT.length];
             const fita = mural.fitas[i];
+            const reserva = mural.fallback[i % mural.fallback.length];
             const rodape = p.timestamp ? haQuanto(p.timestamp, agora) : handle;
             const numeros = [p.curtidas !== undefined && `${compacto(p.curtidas)} ${mural.curtidas}`, p.comentarios !== undefined && `${compacto(p.comentarios)} ${mural.comentarios}`].filter(Boolean);
             return (
@@ -48,7 +49,7 @@ export function MuralInstagram({ posts, perfilUrl, handle }: { posts: readonly I
                   className="mural-foto relative block bg-white p-2 pb-8 shadow-[0_16px_30px_-14px_rgba(0,0,0,0.55),0_2px_6px_rgba(0,0,0,0.15)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink sm:p-2.5 sm:pb-9"
                 >
                   <span className="relative block aspect-[4/5] overflow-hidden bg-ink">
-                    <Image src={p.imagem} alt={p.legenda.slice(0, 120)} fill sizes="(min-width: 768px) 200px, 58vw" loading="lazy" className="object-cover" style={{ objectPosition: p.posicao }} />
+                    <MuralImagem foto={{ src: p.imagem, posicao: p.posicao }} reserva={reserva} alt={p.legenda.slice(0, 120)} sizes="(min-width: 768px) 200px, 58vw" />
 
                     {p.tipo !== "imagem" && (
                       <span className="absolute right-2 top-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]" title={p.tipo === "reel" ? mural.reel : mural.carrossel}>

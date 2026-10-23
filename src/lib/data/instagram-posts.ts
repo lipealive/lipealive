@@ -31,8 +31,12 @@ type Midia = {
   children?: { data?: { media_type?: string; media_url?: string; thumbnail_url?: string }[] };
 };
 
-/** 1 h: as URLs do CDN do Instagram são assinadas e expiram; assim estão sempre válidas. */
-const REVALIDATE = 3600;
+/**
+ * 3 dias: o Lipe posta pouco no feed. As URLs do CDN são assinadas e expiram (parâmetro `oe`,
+ * unix em hex); em 23/10/2026 vinham com ~4,3 a 4,5 dias de validade, acima dos 3 dias.
+ * Se alguma vencer antes, o mural troca pela foto local (MuralImagem, onError).
+ */
+const REVALIDATE = 259200;
 const BUSCAR = 12;
 
 /** "2026-10-15T02:43:34+0000" → ISO; inválido vira `undefined` (sem data no mural). */
@@ -51,7 +55,7 @@ function capa(m: Midia) {
 
 /**
  * Posts mais recentes de um perfil do portfólio (`username` sem @), via Instagram Graph API
- * com ISR de 1 h (tag `instagram`). O id da conta vem de me/accounts (cache de 7 dias).
+ * com ISR de 3 dias (tag `instagram`). O id da conta vem de me/accounts (cache de 7 dias).
  * Sem META_TOKEN, perfil fora do portfólio ou erro: devolve `fallback` (erro vai para o log).
  */
 export async function getInstagramPosts(username: string, fallback: readonly InstagramPost[], limite = 6): Promise<InstagramPost[]> {
