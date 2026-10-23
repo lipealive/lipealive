@@ -58,15 +58,23 @@ function inteiro(fonte: string, v: unknown): number | null {
 type Medida = { valor: number | null; em: string | null };
 const vazio: Medida = { valor: null, em: null };
 
-/** Instagram Graph API (Business Discovery). Sem META_IG_USER_ID/META_TOKEN: fallback, sem erro. */
-async function instagram(username: string): Promise<Medida> {
-  const id = process.env.META_IG_USER_ID;
+type ContasMeta = { data?: { instagram_business_account?: { username?: string; followers_count?: unknown } }[] };
+
+/**
+ * Instagram Graph API: UMA chamada em me/accounts; cada página do portfólio com Instagram vinculado
+ * traz o seu perfil, mapeado por username. Perfil que não aparece (ainda fora do portfólio) fica na
+ * reserva sem erro e passa a valer sozinho quando entrar. Sem META_TOKEN: reserva.
+ */
+async function instagram(): Promise<Map<string, Medida>> {
+  const perfis = new Map<string, Medida>();
   const token = process.env.META_TOKEN;
-  if (!id || !token) return vazio;
-  const params = new URLSearchParams({ fields: `business_discovery.username(${username}){followers_count,media_count}`, access_token: token });
-  const fonte = `instagram @${username}`;
-  const r = await ler<{ business_discovery?: { followers_count?: unknown } }>(fonte, `https://graph.facebook.com/v21.0/${id}?${params}`);
-  return r ? { valor: inteiro(fonte, r.data.business_discovery?.followers_count), em: r.em } : vazio;
+  if (!token) return perfis;
+  const params = new URLSearchParams({ fields: "instagram_business_account{username,followers_count,media_count}", limit: "100", access_token: token });
+  const r = await ler<ContasMeta>("instagram", `https://graph.facebook.com/v21.0/me/accounts?${params}`);
+  for (const { instagram_business_account: ig } of r?.data.data ?? []) {
+    if (ig?.username) perfis.set(ig.username.toLowerCase(), { valor: inteiro(`instagram @${ig.username}`, ig.followers_count), em: r!.em });
+  }
+  return perfis;
 }
 
 /** YouTube Data API v3. Sem YOUTUBE_API_KEY: fallback, sem erro. */
@@ -114,11 +122,8 @@ async function mentorados(): Promise<Medida> {
  */
 export async function getStats(): Promise<Stats> {
   const fb = site.stats;
-  const [ig, yt, ment] = await Promise.all([
-    Promise.all(site.versoes.map(async (v) => ({ chave: SEGUIDORES_POR_SLUG[v.slug], ...(await instagram(v.handle.replace(/^@/, ""))) }))),
-    youtube(),
-    mentorados(),
-  ]);
+  const [contas, yt, ment] = await Promise.all([instagram(), youtube(), mentorados()]);
+  const ig = site.versoes.map((v) => ({ chave: SEGUIDORES_POR_SLUG[v.slug], ...(contas.get(v.handle.replace(/^@/, "").toLowerCase()) ?? vazio) }));
   const seguidores = (chave: (typeof ig)[number]["chave"]) => ig.find((m) => m.chave === chave)?.valor ?? fb[chave];
 
   const stats = {

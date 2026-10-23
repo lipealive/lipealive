@@ -20,7 +20,7 @@
 
 ## Estrutura
 - `src/content/site.ts` — conteúdo tipado (fonte única) + `stats` de reserva; `src/content/youtube.json` — fallback dos vídeos
-- `src/lib/data/stats.ts` — números com ISR de 7 dias (tag `stats`): Instagram Graph API (Business Discovery), YouTube Data API v3, API de mentorados do Lipe Ensina (`/wp-json/lpm/v1/seguidores`). Envs em `.env.example`
+- `src/lib/data/stats.ts` — números com ISR de 7 dias (tag `stats`): Instagram Graph API (`me/accounts`, só perfis do portfólio; o resto fica na reserva), YouTube Data API v3, API de mentorados do Lipe Ensina (`/wp-json/lpm/v1/seguidores`). Envs em `.env.example`
 - `src/lib/data/youtube.ts` — 4 vídeos longos via RSS da playlist `UULF…` (ISR 1 h, tag `youtube`)
 - `src/app/api/revalidate/route.ts` — força atualizar (`x-revalidate-secret` ou `?secret=`, `?tag=stats|youtube`)
 - `scripts/sync-youtube.mjs` — lê o RSS dos vídeos longos (channel_id em `CHANNEL_ID`) e grava o JSON de fallback

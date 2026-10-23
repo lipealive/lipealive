@@ -120,16 +120,17 @@ export const site = {
 
   /**
    * Números de reserva: valem quando a fonte de src/lib/data/stats.ts falha ou está sem credencial.
-   * Atualize aqui de vez em quando para o fallback não envelhecer. `total` é sempre a soma.
+   * Atualize aqui de vez em quando para o fallback não envelhecer (últimos reais: 23/10/2026).
+   * `total` é sempre a soma.
    */
   stats: {
-    aliveSeguidores: 1_700_000,
-    ensinaSeguidores: 250_000,
+    aliveSeguidores: 1_706_491,
+    ensinaSeguidores: 251_107,
     constroiSeguidores: 39_600,
     treinaSeguidores: 44_300,
-    ytInscritos: 48_600,
-    ytVideos: 249,
-    mentoradosSeguidores: 695_434,
+    ytInscritos: 49_100,
+    ytVideos: 280,
+    mentoradosSeguidores: 744_688,
   },
 
   versoes: [
