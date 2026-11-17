@@ -20,8 +20,8 @@ const config: Config = {
         youtube: rgb("--youtube"),
         spotify: rgb("--spotify"),
         ink: "#0b0b0c",
-        /** Papel creme da capa do podcast (cartões da dobra Spotify). */
-        creme: "#F7F3EA",
+        /** Vermelho de caneta da capa do podcast ("NÃO TEVE"). */
+        marcador: "#E02424",
         paper: "#f3f1ec",
         /* Marca Alive Finance (kit em ../lipe-lp-financial) */
         finance: { DEFAULT: "#1EA076", magenta: "#E6338A", ink: "#0B1210" },

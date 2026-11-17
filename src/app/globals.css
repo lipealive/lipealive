@@ -156,11 +156,27 @@
   clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
 }
 
-/* ---------- Spotify: equalizador e ondas de som ---------- */
+/* ---------- Spotify: capa de disco + vinil ---------- */
 @keyframes eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
 .eq-barra { transform-origin: bottom; animation: eq var(--eq-dur, 0.9s) ease-in-out infinite; animation-delay: var(--eq-delay, 0s); }
-@keyframes onda { 0% { opacity: 0.15; transform: scale(0.85); } 45% { opacity: 1; } 100% { opacity: 0.15; transform: scale(1.18); } }
-.onda { transform-box: fill-box; transform-origin: var(--onda-origem, center); animation: onda 1.8s ease-out infinite; animation-delay: var(--onda-delay, 0s); }
+@keyframes giro { to { transform: rotate(360deg); } }
+/* duas camadas girando: 8 s sempre; tocando, a de dentro soma 2,67 s → ~2 s por volta, sem salto de ângulo */
+.vinil-giro { animation: giro 8s linear infinite; }
+.vinil-turbo { animation: giro 2.667s linear infinite; animation-play-state: paused; }
+[data-tocando] .vinil-turbo { animation-play-state: running; }
+.vinil-disco {
+  background:
+    radial-gradient(circle, transparent 0 17%, #050505 17.5% 19%, transparent 19.5%),
+    repeating-radial-gradient(circle, #101010 0 2px, #1c1c1c 2px 3px, #0c0c0c 3px 5px);
+}
+/* brilho parado por cima (a luz não gira com o disco) */
+.vinil-brilho { background: conic-gradient(from 25deg, transparent 0 8%, rgba(255, 255, 255, 0.14) 13%, transparent 20% 52%, rgba(255, 255, 255, 0.1) 60%, transparent 68%); }
+/* o disco sai da capa; guardado só depois da hidratação e fora da tela (SSR já mostra para fora) */
+.vinil-trilho { transform: translate3d(calc(var(--capa) * var(--saida)), 0, 0); transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+[data-vinil="guardado"] .vinil-trilho { transform: translate3d(0, 0, 0); }
+@media (hover: hover) and (pointer: fine) {
+  .capa-vinil:hover .vinil-trilho { transform: translate3d(calc(var(--capa) * (var(--saida) + 0.08)), 0, 0); }
+}
 
 /* ---------- Granulação ---------- */
 .noise {
@@ -216,7 +232,8 @@
   .painel-ding, .painel-nome, .selo-gira { animation: none; }
   .mural-foto { transition: none; }
   .esteira-trilho { animation: none; }
-  .eq-barra, .onda { animation: none; }
+  .eq-barra, .vinil-giro, .vinil-turbo { animation: none; }
+  .vinil-trilho { transition: none; }
   [data-reveal="hidden"] { opacity: 1; transform: none; }
   .story-img { animation: none !important; }
 }

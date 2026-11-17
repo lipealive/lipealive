@@ -259,11 +259,12 @@ export const site = {
     /** Rótulo do segmento na barra de progresso. */
     atalho: "Spotify",
     nome: "O irmão mais velho que você não teve",
-    eyebrow: "Podcast",
+    eyebrow: "Podcast · Spotify",
     handle: "@lipe.alive",
-    /** Título manuscrito real da capa (PNG transparente, vai sobre o cartão creme). */
-    titulo: { src: "/fotos/spotify-titulo.png", alt: "O irmão mais velho que você não teve", width: 1084, height: 576 },
-    /** Capa do podcast: thumbnail dos episódios na tracklist. */
+    /** Título em Bebas Neue; `tituloDestaque` sai em vermelho (#E02424, como na capa). */
+    titulo: "O irmão mais velho que você",
+    tituloDestaque: "não teve",
+    /** Capa do podcast: a "capa do disco"; o recorte de baixo (os bonecos) vira o rótulo do vinil. */
     capa: { src: "/fotos/spotify-capa.png", alt: "Capa do podcast O irmão mais velho que você não teve", width: 1380, height: 1380 },
     /** Handle gigante em outline no fundo. */
     fundo: "O irmão mais velho",
@@ -279,19 +280,6 @@ export const site = {
     tocar: "Tocar",
     fechar: "Fechar player",
     playerTitulo: "Player do Spotify",
-    /** Os dois bonecos palito (PNG transparente, vai sobre o cartão creme). Sem o arquivo, placeholder. */
-    boneco: {
-      src: "/fotos/spotify-boneco.png",
-      alt: "Dois bonecos palito: o irmão mais velho, sorrindo, com a mão na cabeça do mais novo",
-      width: 751,
-      height: 693,
-      placeholder: "boneco em breve",
-    },
-    /**
-     * Fone na cabeça do boneco maior (o da direita, sorrindo). x/y = centro da cabeça e raio, em %
-     * da LARGURA da imagem para o raio e da largura/altura para x/y. `escala` ajusta o tamanho fino.
-     */
-    fone: { x: 66, y: 19, raio: 11, escala: 1 },
     /** Fallback dos episódios (sem ID do Spotify: o play abre o show). */
     episodios: [
       { numero: 66, titulo: "Estudar NUNCA vai ser legal, aceitar isso vai MUDAR sua vida!", duracao: 564 },
