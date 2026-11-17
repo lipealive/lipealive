@@ -1,11 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
-import { INSTAGRAM_TAG, STATS_TAG, YOUTUBE_TAG } from "@/lib/data/tags";
+import { INSTAGRAM_TAG, PODCAST_TAG, STATS_TAG, YOUTUBE_TAG } from "@/lib/data/tags";
 
 export const dynamic = "force-dynamic";
 
-const TAGS = [STATS_TAG, YOUTUBE_TAG, INSTAGRAM_TAG];
+const TAGS = [STATS_TAG, YOUTUBE_TAG, INSTAGRAM_TAG, PODCAST_TAG];
 
 /** Segredo no header `x-revalidate-secret` ou em `?secret=`. Sem REVALIDATE_SECRET a rota fica fechada. */
 function autorizado(req: NextRequest) {
@@ -17,7 +17,7 @@ function autorizado(req: NextRequest) {
 }
 
 /**
- * Força a atualização dos dados na hora: invalida as tags `stats`, `youtube` e `instagram` (ou só `?tag=`),
+ * Força a atualização dos dados na hora: invalida as tags `stats`, `youtube`, `instagram` e `podcast` (ou só `?tag=`),
  * e a página é regerada na próxima visita.
  *   curl -X POST -H "x-revalidate-secret: $REVALIDATE_SECRET" https://lipealive.com.br/api/revalidate
  */

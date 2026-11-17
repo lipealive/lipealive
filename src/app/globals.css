@@ -21,6 +21,7 @@
     --constroi: 255 196 0; /* amarelo obra (#FFC400) */
     --treina: 225 29 46; /* vermelho (#E11D2E) */
     --youtube: 255 0 51; /* vermelho YouTube (#FF0033), diferente do Treina */
+    --spotify: 29 185 84; /* verde Spotify (#1DB954) */
 
     --accent: var(--alive);
     --on-accent: 11 11 12;
@@ -32,6 +33,7 @@
   [data-accent="constroi"] { --accent: var(--constroi); --on-accent: 11 11 12; }
   [data-accent="treina"] { --accent: var(--treina); --on-accent: 255 255 255; }
   [data-accent="youtube"] { --accent: var(--youtube); --on-accent: 255 255 255; }
+  [data-accent="spotify"] { --accent: var(--spotify); --on-accent: 11 11 12; }
   /* Header sobre dobras sem cor de versão */
   [data-accent="ink"] { --accent: 11 11 12; --on-accent: 255 255 255; }
   [data-accent="paper"] { --accent: 243 241 236; --on-accent: 11 11 12; }
@@ -154,6 +156,12 @@
   clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
 }
 
+/* ---------- Spotify: equalizador e ondas de som ---------- */
+@keyframes eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+.eq-barra { transform-origin: bottom; animation: eq var(--eq-dur, 0.9s) ease-in-out infinite; animation-delay: var(--eq-delay, 0s); }
+@keyframes onda { 0% { opacity: 0.15; transform: scale(0.85); } 45% { opacity: 1; } 100% { opacity: 0.15; transform: scale(1.18); } }
+.onda { transform-box: fill-box; transform-origin: var(--onda-origem, center); animation: onda 1.8s ease-out infinite; animation-delay: var(--onda-delay, 0s); }
+
 /* ---------- Granulação ---------- */
 .noise {
   position: fixed;
@@ -208,6 +216,7 @@
   .painel-ding, .painel-nome, .selo-gira { animation: none; }
   .mural-foto { transition: none; }
   .esteira-trilho { animation: none; }
+  .eq-barra, .onda { animation: none; }
   [data-reveal="hidden"] { opacity: 1; transform: none; }
   .story-img { animation: none !important; }
 }

@@ -40,6 +40,15 @@ export function haQuanto(iso: string, agora = Date.now()) {
   return relativoFmt.format(-1, "minute");
 }
 
+/** Duração de episódio: 564 → "9min 24s"; 3725 → "1h 2min". */
+export function duracaoTexto(seg: number) {
+  const h = Math.floor(seg / 3600);
+  const min = Math.floor((seg % 3600) / 60);
+  const s = Math.floor(seg % 60);
+  if (h) return `${h}h ${min}min`;
+  return min ? `${min}min ${s}s` : `${s}s`;
+}
+
 /** Texto final de uma prova: fixo (`value`) ou do stats (o `total` sai sempre arredondado). */
 export function valorDaProva(p: Prova, stats: Stats) {
   if ("value" in p) return p.value;

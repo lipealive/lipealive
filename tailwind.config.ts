@@ -18,7 +18,10 @@ const config: Config = {
         constroi: rgb("--constroi"),
         treina: rgb("--treina"),
         youtube: rgb("--youtube"),
+        spotify: rgb("--spotify"),
         ink: "#0b0b0c",
+        /** Papel creme da capa do podcast (cartões da dobra Spotify). */
+        creme: "#F7F3EA",
         paper: "#f3f1ec",
         /* Marca Alive Finance (kit em ../lipe-lp-financial) */
         finance: { DEFAULT: "#1EA076", magenta: "#E6338A", ink: "#0B1210" },

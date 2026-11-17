@@ -85,7 +85,7 @@ export const site = {
 
   /** Faixas marquee entre as dobras. */
   marquee: {
-    itens: ["Stay Alive", "Pega a senha", "@lipe.alive", "Quantas versões de você existem?", "@llipe.ensina", "@lipe.constroi", "@llipe.treina"],
+    itens: ["Stay Alive", "Pega a senha", "@lipe.alive", "Quantas versões de você existem?", "@llipe.ensina", "O irmão mais velho que você não teve", "@lipe.constroi", "@llipe.treina"],
   },
 
   hero: {
@@ -251,6 +251,53 @@ export const site = {
         { src: "/fotos/lipe-terno.jpg", alt: "Lipe de terno" },
       ] as readonly { src: string; alt: string; posicao?: string }[],
     },
+  },
+
+  /** Dobra Spotify (podcast), entre o Lipe Alive e o Lipe Ensina. Episódios de src/lib/data/podcast.ts. */
+  spotify: {
+    slug: "spotify",
+    /** Rótulo do segmento na barra de progresso. */
+    atalho: "Spotify",
+    nome: "O irmão mais velho que você não teve",
+    eyebrow: "Podcast",
+    handle: "@lipe.alive",
+    /** Título manuscrito real da capa (PNG transparente, vai sobre o cartão creme). */
+    titulo: { src: "/fotos/spotify-titulo.png", alt: "O irmão mais velho que você não teve", width: 1084, height: 576 },
+    /** Capa do podcast: thumbnail dos episódios na tracklist. */
+    capa: { src: "/fotos/spotify-capa.png", alt: "Capa do podcast O irmão mais velho que você não teve", width: 1380, height: 1380 },
+    /** Handle gigante em outline no fundo. */
+    fundo: "O irmão mais velho",
+    sobre: "Divido experiências que eu tive e que hoje analiso com um humor",
+    showId: "033WeA08a87DF3dNK3Nixg",
+    url: "https://open.spotify.com/show/033WeA08a87DF3dNK3Nixg",
+    /** Feed RSS público (Spotify for Creators/anchor.fm). Hoje o show não tem feed público: `null`. */
+    rss: null as string | null,
+    avaliacao: { nota: "4,8", total: 23, label: "avaliações" },
+    seguir: "Seguir no Spotify",
+    ouvir: "Ouvir agora",
+    tracklistTitulo: "Episódios",
+    tocar: "Tocar",
+    fechar: "Fechar player",
+    playerTitulo: "Player do Spotify",
+    /** Os dois bonecos palito (PNG transparente, vai sobre o cartão creme). Sem o arquivo, placeholder. */
+    boneco: {
+      src: "/fotos/spotify-boneco.png",
+      alt: "Dois bonecos palito: o irmão mais velho, sorrindo, com a mão na cabeça do mais novo",
+      width: 751,
+      height: 693,
+      placeholder: "boneco em breve",
+    },
+    /**
+     * Fone na cabeça do boneco maior (o da direita, sorrindo). x/y = centro da cabeça e raio, em %
+     * da LARGURA da imagem para o raio e da largura/altura para x/y. `escala` ajusta o tamanho fino.
+     */
+    fone: { x: 66, y: 19, raio: 11, escala: 1 },
+    /** Fallback dos episódios (sem ID do Spotify: o play abre o show). */
+    episodios: [
+      { numero: 66, titulo: "Estudar NUNCA vai ser legal, aceitar isso vai MUDAR sua vida!", duracao: 564 },
+      { numero: 65, titulo: "Como nunca mais se sentir TÍMIDO!", duracao: 727 },
+      { numero: 64, titulo: "Porque não existe um ENTORPECENTE SAUDÁVEL?", duracao: 545 },
+    ] as readonly { numero: number; titulo: string; duracao: number }[],
   },
 
   /** Dobra YouTube (canal @LipeAlive), entre o hero e o Lipe Alive. Vídeos de src/lib/data/youtube.ts. */

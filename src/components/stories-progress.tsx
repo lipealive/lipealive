@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { site } from "@/content/site";
 
-/** Segmentos da barra: YouTube + as 4 versões. */
+/** Segmentos da barra, na ordem da página: YouTube, Alive, Spotify e as outras 3 versões. */
+const versoes = site.versoes.map((v) => ({ slug: v.slug, nome: v.nome, atalho: v.atalho, accent: v.accent as string }));
 const SEGMENTOS = [
   { slug: site.youtube.slug, nome: site.youtube.titulo, atalho: site.youtube.atalho, accent: "youtube" },
-  ...site.versoes.map((v) => ({ slug: v.slug, nome: v.nome, atalho: v.atalho, accent: v.accent as string })),
+  versoes[0],
+  { slug: site.spotify.slug, nome: site.spotify.nome, atalho: site.spotify.atalho, accent: "spotify" },
+  ...versoes.slice(1),
 ];
 const SLUGS = SEGMENTOS.map((s) => s.slug);
 /** Todas as dobras com id, na ordem, e a cor que o header assume sobre cada uma. */
@@ -20,7 +23,7 @@ const DOBRAS: { id: string; accent: string }[] = [
 const HEADER_H = 48;
 
 /**
- * Header fixo estilo Stories do Instagram: nome + um segmento por dobra (YouTube e versões), que enche
+ * Header fixo estilo Stories do Instagram: nome + um segmento por dobra (YouTube, Spotify e versões), que enche
  * conforme a rolagem dentro da dobra. Clicar pula para a versão.
  * O fundo assume a cor da dobra atual (85% + blur), com transição.
  */

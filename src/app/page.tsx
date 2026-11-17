@@ -5,6 +5,7 @@ import { Marquee } from "@/components/marquee";
 import { Hero } from "@/components/sections/hero";
 import { Youtube } from "@/components/sections/youtube";
 import { Alive } from "@/components/sections/alive";
+import { Spotify } from "@/components/sections/spotify";
 import { Ensina } from "@/components/sections/ensina";
 import { Constroi } from "@/components/sections/constroi";
 import { Treina } from "@/components/sections/treina";
@@ -13,6 +14,7 @@ import { Publicidade } from "@/components/sections/publicidade";
 import { Footer } from "@/components/footer";
 import { getStats } from "@/lib/data/stats";
 import { getVideos } from "@/lib/data/youtube";
+import { getEpisodios } from "@/lib/data/podcast";
 import { getInstagramPosts, type InstagramPost } from "@/lib/data/instagram-posts";
 
 const m = site.marquee.itens;
@@ -25,11 +27,11 @@ const muralFallback: InstagramPost[] = Array.from({ length: mural.quantidade }, 
   return { id: `${f.src}#${i}`, tipo: "imagem", imagem: f.src, posicao: f.posicao, permalink: v.url, legenda: f.alt };
 });
 
-/** ISR: a página regera a cada 1 h (vídeos); posts do Instagram a cada 3 dias e números a cada 7 (ver src/lib/data). */
+/** ISR: a página regera a cada 1 h (vídeos); posts do Instagram e episódios do podcast a cada 3 dias, números a cada 7 (ver src/lib/data). */
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [stats, videos, posts] = await Promise.all([getStats(), getVideos(), getInstagramPosts(mural.username, muralFallback, mural.quantidade)]);
+  const [stats, videos, posts, episodios] = await Promise.all([getStats(), getVideos(), getInstagramPosts(mural.username, muralFallback, mural.quantidade), getEpisodios()]);
 
   return (
     <>
@@ -41,12 +43,14 @@ export default async function Home() {
         <Marquee itens={m} className="bg-alive text-ink" />
         <Alive stats={stats} posts={posts} />
         <Marquee itens={m} className="bg-ink text-white" tilt={2} reverse />
+        <Spotify episodios={episodios} />
+        <Marquee itens={m} className="bg-ink text-spotify" />
         <Ensina stats={stats} />
-        <Marquee itens={m} className="bg-white text-ensina" />
+        <Marquee itens={m} className="bg-white text-ensina" tilt={2} reverse />
         <Constroi stats={stats} />
-        <Marquee itens={m} className="bg-ink text-constroi" tilt={2} reverse />
+        <Marquee itens={m} className="bg-ink text-constroi" />
         <Treina stats={stats} />
-        <Marquee itens={m} className="bg-white text-treina" />
+        <Marquee itens={m} className="bg-white text-treina" tilt={2} reverse />
         <Produtos />
         <Publicidade stats={stats} />
       </main>
